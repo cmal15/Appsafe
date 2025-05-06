@@ -37,7 +37,7 @@ func main(){
 	pattern := `CK(\d+)\w+`
 	regexCK := regexp.MustCompile(pattern)
 
-	var checks [21]string
+	checks := make([]string, 20)
 	
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan(){
@@ -48,6 +48,11 @@ func main(){
 			num, err := strconv.Atoi(groups[1])
 			if err != nil{
 				fmt.Println("Error on int conversion ", err)
+			}
+			if num >= len(checks){
+				newChecks := make([]string, num+1)
+				copy(newChecks, checks)
+				checks = newChecks
 			}
 			checks[num] = groups[0]
 		}
