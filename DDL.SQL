@@ -60,11 +60,12 @@ go
 CREATE TABLE AUTO(
     ID_AUTO       int         NOT NULL,
     NUMPLACAS     char(8)     NOT NULL,
-    [AÑO(CK2)]    char(40)    NOT NULL,
+    AÑO           int         NOT NULL,
     ID_USUARIO    int         NOT NULL,
     ID_MODELO     int         NOT NULL,
-    CONSTRAINT PK_AUTO PRIMARY KEY NONCLUSTERED (ID_AUTO)
-)
+    CONSTRAINT PK_AUTO PRIMARY KEY NONCLUSTERED (ID_AUTO),
+    CONSTRAINT CK2_AUTO_AÑO_ANTIGUEDAD CHECK (AÑO >= YEAR(GETDATE())-5 AND AÑO <= YEAR(GETDATE()))
+);
 go
 
 
@@ -80,8 +81,8 @@ go
  */
 
 CREATE TABLE BANCO(
-    ID_BANCO    tinyint     NOT NULL,
-    NOMBRE      char(40)    NOT NULL,
+    ID_BANCO    tinyint        NOT NULL,
+    NOMBRE      varchar(40)    NOT NULL,
     CONSTRAINT PK_BANCO PRIMARY KEY NONCLUSTERED (ID_BANCO)
 )
 go
@@ -99,8 +100,8 @@ go
  */
 
 CREATE TABLE CATALOGO_ACCIDENTES(
-    ID_TIPO_ACCIDENTE    int         NOT NULL,
-    TIPO                 char(40)    NOT NULL,
+    ID_TIPO_ACCIDENTE    int            NOT NULL,
+    TIPO                 varchar(40)    NOT NULL,
     CONSTRAINT PK_CATALOGO_ACCIDENTES PRIMARY KEY NONCLUSTERED (ID_TIPO_ACCIDENTE)
 )
 go
@@ -118,8 +119,8 @@ go
  */
 
 CREATE TABLE CATALOGO_QUEJAS(
-    ID_CATALOGO_QUEJAS    int         NOT NULL,
-    MOTIVO                char(40)    NOT NULL,
+    ID_CATALOGO_QUEJAS    int           NOT NULL,
+    MOTIVO                varchar(40)    NOT NULL,
     CONSTRAINT PK_CATALOGO_QUEJAS PRIMARY KEY NONCLUSTERED (ID_CATALOGO_QUEJAS)
 )
 go
@@ -137,12 +138,13 @@ go
  */
 
 CREATE TABLE CLIENTE(
-    ID_USUARIO               int               NOT NULL,
-    RFC                      char(13)          NOT NULL,
-    CELULAR                  numeric(13, 0)    NOT NULL,
-    FECHA_REGISTRO           date              NOT NULL,
-    DIRECCION_FACTURACIPN    char(40)          NOT NULL,
+    ID_USUARIO               int                  NOT NULL,
+    RFC                      varchar(13)          NOT NULL,
+    CELULAR                  varchar(13)          NOT NULL,
+    FECHA_REGISTRO           date                 NOT NULL,
+    DIRECCION_FACTURACIPN    varchar(40)          NOT NULL,
     CONSTRAINT PK_CLIENTE PRIMARY KEY NONCLUSTERED (ID_USUARIO)
+    CONSTRAINT CK20_CLIENTE_CELULAR CHECK (LEN(CELULAR) BETWEEN 10 AND 13 AND CELULAR NOT LIKE '%[^0-9]%')
 )
 go
 
@@ -159,11 +161,11 @@ go
  */
 
 CREATE TABLE CONDUCTOR(
-    ID_USUARIO            int          NOT NULL,
-    LICENCIA              char(8)      NOT NULL,
-    FOTO                  image        NOT NULL,
-    VIGENCIA              date         NOT NULL,
-    [DESCRIPCION (CK11)]  char(600)    NOT NULL,
+    ID_USUARIO            int             NOT NULL,
+    LICENCIA              varchar(8)      NOT NULL,
+    FOTO                  image           NOT NULL,
+    VIGENCIA              date            NOT NULL,
+    DESCRIPCION           varchar(600)    NOT NULL, -- CK11_CONDUCTOR_DESCRIPCION MANAGED DUE TO STATIC ATRIBUTE LENGHT
     CONSTRAINT PK_CONDUCTOR PRIMARY KEY NONCLUSTERED (ID_USUARIO)
 )
 go
@@ -181,11 +183,11 @@ go
  */
 
 CREATE TABLE DESCUENTO(
-    ID_DESCUENTO    int         NOT NULL,
-    FECHA_INICIO    date        NOT NULL,
-    FECHA_FIN       date        NOT NULL,
-    MONTO           money       NOT NULL,
-    ORIGEN          char(40)    NOT NULL,
+    ID_DESCUENTO    int            NOT NULL,
+    FECHA_INICIO    date           NOT NULL,
+    FECHA_FIN       date           NOT NULL,
+    MONTO           money          NOT NULL,
+    ORIGEN          varchar(40)    NOT NULL,
     CONSTRAINT PK_DESCUENTO PRIMARY KEY NONCLUSTERED (ID_DESCUENTO)
 )
 go
@@ -223,8 +225,10 @@ go
 
 CREATE TABLE ESTATUS(
     ID_ESTATUS             tinyint     NOT NULL,
-    [NOMBRE_ESTATUS(CK4)]  char(40)    NOT NULL,
-    CONSTRAINT PK_ESTATUS PRIMARY KEY NONCLUSTERED (ID_ESTATUS)
+    NOMBRE_ESTATUS  varchar(40)    NOT NULL,
+    CONSTRAINT PK_ESTATUS PRIMARY KEY NONCLUSTERED (ID_ESTATUS),
+    CONSTRAINT CK4_ESTATUS_NOMBRE CHECK (NOMBRE_ESTATUS IN ('SOLICITADO','PROGRAMADO','CONFIRMADO','EN CURSO',
+                'TERMINADO', 'POR COBRAR', 'PAGADO', 'CON ADEUDO', 'CANCELADO'))
 )
 go
 
@@ -243,8 +247,8 @@ go
 CREATE TABLE FACTURA(
     UUID            char(32)    NOT NULL,
     ID_USUARIO      int         NOT NULL,
-    [IMPORTE(CK8)]  char(40)    NOT NULL,
-    FECHA           char(40)    NOT NULL,
+    IMPORTE         money       NOT NULL,
+    FECHA           date        NOT NULL,
     CONSTRAINT PK_FACTURA PRIMARY KEY NONCLUSTERED (UUID)
 )
 go
@@ -262,8 +266,8 @@ go
  */
 
 CREATE TABLE MARCA(
-    ID_MARCA        int         NOT NULL,
-    NOMBRE_MARCA    char(40)    NOT NULL,
+    ID_MARCA        int            NOT NULL,
+    NOMBRE_MARCA    varchar(40)    NOT NULL,
     CONSTRAINT PK_MARCA PRIMARY KEY NONCLUSTERED (ID_MARCA)
 )
 go
@@ -281,9 +285,9 @@ go
  */
 
 CREATE TABLE MODELO(
-    ID_MODELO        int         NOT NULL,
-    NOMBRE_MODELO    char(40)    NOT NULL,
-    ID_MARCA         int         NOT NULL,
+    ID_MODELO        int            NOT NULL,
+    NOMBRE_MODELO    varchar(40)    NOT NULL,
+    ID_MARCA         int            NOT NULL,
     CONSTRAINT PK_MODELO PRIMARY KEY NONCLUSTERED (ID_MODELO)
 )
 go
@@ -302,10 +306,10 @@ go
 
 CREATE TABLE PAGO(
     ID_USUARIO    int     NOT NULL,
-    [FOLIO(CK7)]  int     NOT NULL,
+    FOLIO  int     NOT NULL,
     MONTO         int     NOT NULL,
     FECHA         date    NOT NULL,
-    CONSTRAINT PK_PAGO PRIMARY KEY NONCLUSTERED (ID_USUARIO, [FOLIO(CK7)])
+    CONSTRAINT PK_PAGO PRIMARY KEY NONCLUSTERED (ID_USUARIO, FOLIO)
 )
 go
 
@@ -322,15 +326,15 @@ go
  */
 
 CREATE TABLE QUEJA(
-    ID_QUEJA                        int         NOT NULL,
-    ID_VIAJE                        bigint      NOT NULL,
-    TITULO                          char(40)    NOT NULL,
-    FECHA_GENERACION                date        NOT NULL,
-    [DESCRIPCION_QUEJA(CK13)]       char(40)    NOT NULL,
-    [DESCRIPCION_RESOLUCION(CK14)]  char(40)    NULL,
-    FECHA_RESOLUCION                date        NOT NULL,
-    ID_CATALOGO_QUEJAS              int         NOT NULL,
-    ID_USUARIO                      int         NOT NULL,
+    ID_QUEJA                        int            NOT NULL,
+    ID_VIAJE                        bigint         NOT NULL,
+    TITULO                          varchar(40)    NOT NULL,
+    FECHA_GENERACION                date           NOT NULL,
+    DESCRIPCION_QUEJA               varchar(40)    NOT NULL,
+    DESCRIPCION_RESOLUCION          varchar(40)    NULL,
+    FECHA_RESOLUCION                date           NOT NULL,
+    ID_CATALOGO_QUEJAS              int            NOT NULL,
+    ID_USUARIO                      int            NOT NULL,
     CONSTRAINT PK_QUEJA PRIMARY KEY NONCLUSTERED (ID_QUEJA)
 )
 go
@@ -350,7 +354,7 @@ go
 CREATE TABLE REGISTRO_UBICACION(
     ID_REGISTRO_UBICACION    bigint      NOT NULL,
     LONGITUD                 float       NOT NULL,
-    LATITUD                  int         NOT NULL,
+    LATITUD                  float       NOT NULL,
     HORA                     datetime    NOT NULL,
     ID_VIAJE                 bigint      NOT NULL,
     CONSTRAINT PK_REGISTRO_UBICACION PRIMARY KEY NONCLUSTERED (ID_REGISTRO_UBICACION)
@@ -372,10 +376,11 @@ go
 CREATE TABLE TARJETA(
     ID_TARJETA    int               NOT NULL,
     VIGENCIA      date              NOT NULL,
-    NUMERO        numeric(20, 0)    NOT NULL,
+    NUMERO        varchar(20)       NOT NULL,
     ID_BANCO      tinyint           NOT NULL,
     ID_USUARIO    int               NOT NULL,
-    CONSTRAINT PK_TARJETA PRIMARY KEY NONCLUSTERED (ID_TARJETA)
+    CONSTRAINT PK_TARJETA PRIMARY KEY NONCLUSTERED (ID_TARJETA),
+    CONSTRAINT CK21_TARJETA_NUMERO CHECK (NUMERO NOT LIKE '%[^0-9]%' AND LEN(NUMERO) BETWEEN 16 AND 20)
 )
 go
 
@@ -392,9 +397,10 @@ go
  */
 
 CREATE TABLE TELEFONO(
-    ID_USUARIO    int               NOT NULL,
-    TELEFONO      numeric(13, 0)    NOT NULL,
-    CONSTRAINT PK_TELEFONO PRIMARY KEY NONCLUSTERED (ID_USUARIO, TELEFONO)
+    ID_USUARIO    int                  NOT NULL,
+    TELEFONO      varchar(13)          NOT NULL,
+    CONSTRAINT PK_TELEFONO PRIMARY KEY NONCLUSTERED (ID_USUARIO, TELEFONO),
+    CONSTRAINT CK20_TELEFONO_TELEFONO CHECK (LEN(TELEFONO) BETWEEN 10 AND 13 AND CELULAR NOT LIKE '%[^0-9]%')
 )
 go
 
@@ -411,16 +417,21 @@ go
  */
 
 CREATE TABLE USUARIO(
-    ID_USUARIO                 int         NOT NULL,
-    ID_RECOMENDANTE            int         NULL,
-    [TIPO_USUARIO(CK16)(CK3)]  char(40)    NOT NULL,
-    [CONTRASE�A(CK10)]         char(40)    NOT NULL,
-    NOMBRE_USUARIO             char(40)    NOT NULL,
-    CORREO                     char(40)    NOT NULL,
-    NOMBRE                     char(40)    NOT NULL,
-    APELLIDO1                  char(40)    NOT NULL,
-    APELLIDO2                  char(40)    NULL,
-    CONSTRAINT PK_USUARIO PRIMARY KEY NONCLUSTERED (ID_USUARIO)
+    ID_USUARIO                 int              NOT NULL,
+    ID_RECOMENDANTE            int              NULL,
+    ES_ADMINISTRADOR           bit              NOT NULL,
+    ES_CONDUCTOR               bit              NOT NULL,
+    ES_CLIENTE                 bit              NOT NULL,
+    CONTRASEÑA                 varchar(10)      NOT NULL,
+    NOMBRE_USUARIO             varchar(40)      NOT NULL,
+    CORREO                     varchar(40)      NOT NULL,
+    NOMBRE                     varchar(40)      NOT NULL,
+    APELLIDO1                  varchar(40)      NOT NULL,
+    APELLIDO2                  varchar(40)      NULL,
+    CONSTRAINT PK_USUARIO PRIMARY KEY NONCLUSTERED (ID_USUARIO),
+    CONSTRAINT CK3_USUARIO_TIPO_ADMIN_CONDUCTOR CHECK (NOT (ES_ADMINISTRADOR = 1 AND ES_CONDUCTOR = 1)),
+    CONSTRAINT CK10_USUARIO_CONTRASEÑA_FORMATO CHECK (CONTRASEÑA LIKE '%[0-9]%' AND CONTRASEÑA LIKE '%[A-Z]%'
+                                                    AND CONTRASEÑA LIKE '%[*#&]%')
 )
 go
 
@@ -437,25 +448,30 @@ go
  */
 
 CREATE TABLE VIAJE(
-    ID_VIAJE                       bigint       NOT NULL,
-    [FECHA_INICIOVIAJE(CK18,CK6)]  date         NOT NULL,
-    ORIGEN_LONGITUD                float        NOT NULL,
-    ORIGEN_LATITUD                 float        NOT NULL,
-    DESTINO_LONGITUD               float        NOT NULL,
-    DESTINO_LATITUD                float        NOT NULL,
-    IMPORTE                        money        NOT NULL,
-    [PROPINA(CK15)]                money        NULL,
-    [ADEUDO(CK17)]                 money        NULL,
-    CALIFICACION                   int          NULL,
-    [COMENTARIO(CK5)]              char(400)    NULL,
-    [PAGO_CON_TARJETA(CK19)]       bit          NOT NULL,
-    ID_ESTATUS                     tinyint      NOT NULL,
-    ID_TARJETA                     int          NULL,
-    ID_USUARIO                     int          NOT NULL,
-    UUID                           char(32)     NULL,
-    ID_AUTO                        int          NOT NULL,
-    ID_DESCUENTO                   int          NULL,
-    CONSTRAINT PK_VIAJE PRIMARY KEY NONCLUSTERED (ID_VIAJE)
+    ID_VIAJE                       bigint          NOT NULL,
+    FECHA_INICIOVIAJE              datetime        NOT NULL,
+    ORIGEN_LONGITUD                float           NOT NULL,
+    ORIGEN_LATITUD                 float           NOT NULL,
+    DESTINO_LONGITUD               float           NOT NULL,
+    DESTINO_LATITUD                float           NOT NULL,
+    IMPORTE                        money           NOT NULL,
+    PROPINA                        int           NULL,
+    ADEUDO                         money           NULL,
+    CALIFICACION                   int             NULL,
+    COMENTARIO                     varchar(400)    NULL,
+    PAGO_CON_TARJETA               bit             NOT NULL,
+    ID_ESTATUS                     tinyint         NOT NULL,
+    ID_TARJETA                     int             NULL,
+    ID_USUARIO                     int             NOT NULL,
+    UUID                           varchar(32)     NULL,
+    ID_AUTO                        int             NOT NULL,
+    ID_DESCUENTO                   int             NULL,
+    CONSTRAINT PK_VIAJE PRIMARY KEY NONCLUSTERED (ID_VIAJE),
+    CONSTRAINT DF_VIAJE_PROPINA DEFAULT 0.00 FOR PROPINA,
+    CONSTRAINT DF_VIAJE_ADEUDO DEFAULT 0.00 FOR ADEUDO,
+    CONSTRAINT DF_VIAJE_COMENTARIO DEFAULT 'Sin comentario' FOR COMENTARIO,
+    CONSTRAINT CK5_VIAJE_CALIFICACION CHECK (CALIFICACION <= 5 AND CALIFICACION >= 0),
+    CONSTRAINT CK15_VIAJE_PROPINA CHECK (PROPINA IN (0,10,15,20))
 )
 go
 
