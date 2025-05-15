@@ -2,7 +2,10 @@
  * ER/Studio 8.0 SQL Code Generation
  * Company :      FIUNAM
  * Project :      1Equipo-Appsafe.DM1
- * Author :       CarlosMAL
+ * Authors :      Alvarez Lopez Carlos Manuel
+				  Membrilla Isaias Iñaki Ramos
+				  Miramón Pérez Jocelyn
+				  
  *
  * Date Created : Wednesday, April 16, 2025 17:39:49
  * Target DBMS : Microsoft SQL Server 2008
@@ -119,7 +122,7 @@ go
  */
 
 CREATE TABLE CATALOGO_QUEJAS(
-    ID_CATALOGO_QUEJAS    int           NOT NULL,
+    ID_CATALOGO_QUEJAS    int            NOT NULL,
     MOTIVO                varchar(40)    NOT NULL,
     CONSTRAINT PK_CATALOGO_QUEJAS PRIMARY KEY NONCLUSTERED (ID_CATALOGO_QUEJAS)
 )
@@ -139,12 +142,13 @@ go
 
 CREATE TABLE CLIENTE(
     ID_USUARIO               int                  NOT NULL,
-    RFC                      varchar(13)          NOT NULL,
+    RFC                      varchar(13)          NULL,
     CELULAR                  varchar(13)          NOT NULL,
     FECHA_REGISTRO           date                 NOT NULL,
-    DIRECCION_FACTURACIPN    varchar(40)          NOT NULL,
-    CONSTRAINT PK_CLIENTE PRIMARY KEY NONCLUSTERED (ID_USUARIO)
-    CONSTRAINT CK20_CLIENTE_CELULAR CHECK (LEN(CELULAR) BETWEEN 10 AND 13 AND CELULAR NOT LIKE '%[^0-9]%')
+    DIRECCION_FACTURACION    varchar(40)          NOT NULL,
+    CONSTRAINT PK_CLIENTE PRIMARY KEY NONCLUSTERED (ID_USUARIO),
+    CONSTRAINT CK20_CLIENTE_CELULAR CHECK (LEN(CELULAR) BETWEEN 10 AND 13 AND CELULAR NOT LIKE '%[^0-9]%'),
+	CONSTRAINT CK22_CLIENTE_RFC CHECK (LEN(RFC) = 13 AND RFC LIKE '[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][A-Z][A-Z][A-Z]')
 )
 go
 
@@ -306,8 +310,8 @@ go
 
 CREATE TABLE PAGO(
     ID_USUARIO    int     NOT NULL,
-    FOLIO  int     NOT NULL,
-    MONTO         int     NOT NULL,
+    FOLIO		  int     NOT NULL,
+    MONTO         money     NOT NULL,
     FECHA         date    NOT NULL,
     CONSTRAINT PK_PAGO PRIMARY KEY NONCLUSTERED (ID_USUARIO, FOLIO)
 )
@@ -400,7 +404,7 @@ CREATE TABLE TELEFONO(
     ID_USUARIO    int                  NOT NULL,
     TELEFONO      varchar(13)          NOT NULL,
     CONSTRAINT PK_TELEFONO PRIMARY KEY NONCLUSTERED (ID_USUARIO, TELEFONO),
-    CONSTRAINT CK20_TELEFONO_TELEFONO CHECK (LEN(TELEFONO) BETWEEN 10 AND 13 AND CELULAR NOT LIKE '%[^0-9]%')
+    CONSTRAINT CK20_TELEFONO_TELEFONO CHECK (LEN(TELEFONO) BETWEEN 10 AND 13 AND TELEFONO NOT LIKE '%[^0-9]%')
 )
 go
 
@@ -455,7 +459,7 @@ CREATE TABLE VIAJE(
     DESTINO_LONGITUD               float           NOT NULL,
     DESTINO_LATITUD                float           NOT NULL,
     IMPORTE                        money           NOT NULL,
-    PROPINA                        int           NULL,
+    PROPINA                        int             NULL,
     ADEUDO                         money           NULL,
     CALIFICACION                   int             NULL,
     COMENTARIO                     varchar(400)    NULL,
