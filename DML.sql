@@ -3,8 +3,8 @@
  * Company :      FIUNAM
  * Project :      1Equipo-Appsafe.DM1
  * Authors :      Alvarez Lopez Carlos Manuel
-				  Membrilla Isaias Iñaki Ramos
-				  Miramón Pérez Jocelyn
+				  Membrilla Isaias Iï¿½aki Ramos
+				  Miramï¿½n Pï¿½rez Jocelyn
  *
  * Date Created : Wednesday, April 16, 2025 17:39:49
  * Target DBMS : Microsoft SQL Server 2008
@@ -31,7 +31,7 @@
 
 CREATE TRIGGER TR_AUTO_AF1
 ON USUARIOS.AUTOMOVIL
-FOR INSERT, UPDATE
+BEFORE INSERT, UPDATE
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -59,6 +59,17 @@ BEGIN
 		RAISERROR('El vehiculo ya esta registrado para otro conductor',16,1);
 		ROLLBACK TRANSACTION;
 	END
+
+	IF EXISTS(
+		SELECT 1
+		FROM inserted
+		WHERE AÃ‘O < YEAR(GETDATE()-5)
+	)
+	BEGIN
+		RAISERROR('El tiene mÃ¡s de 5 aÃ±os de antiguedad',16,1);
+		ROLLBACK TRANSACTION;
+	END
+
 END;
 
 -- ##################################################
