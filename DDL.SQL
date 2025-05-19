@@ -11,7 +11,7 @@
  * Target DBMS : Microsoft SQL Server 2008
  */
 
-CREATE DATABASE APPSAFE
+CREATE DATABASE [APPSAFE]
 
 USE [APPSAFE]
 
@@ -64,10 +64,10 @@ go
 
 CREATE TABLE AUTOMOVIL(
     ID_AUTOMOVIL       int         NOT NULL,
-    NUMPLACAS     char(8)     NOT NULL,
-    AÑO           int         NOT NULL,
-    ID_USUARIO    int         NOT NULL,
-    ID_MODELO     int         NOT NULL,
+    NUMPLACAS          char(8)     NOT NULL,
+    AÑO                int         NOT NULL,
+    ID_USUARIO         int         NOT NULL,
+    ID_MODELO          int         NOT NULL,
     CONSTRAINT PK_AUTOMOVIL PRIMARY KEY NONCLUSTERED (ID_AUTOMOVIL),
 );
 go
@@ -458,8 +458,8 @@ CREATE TABLE VIAJE(
     DESTINO_LONGITUD               float           NOT NULL,
     DESTINO_LATITUD                float           NOT NULL,
     IMPORTE                        money           NOT NULL,
-    PROPINA                        int             NULL CONSTRAINT DF_VIAJE_PROPINA DEFAULT 0.00,
-    ADEUDO                         money           NULL CONSTRAINT DF_VIAJE_ADEUDO DEFAULT 0.00,
+    PROPINA                        money           NULL CONSTRAINT DF15_VIAJE_PROPINA DEFAULT 0.00,
+    ADEUDO                         money           NULL CONSTRAINT DF17_VIAJE_ADEUDO DEFAULT 0.00,
     CALIFICACION                   int             NULL,
     COMENTARIO                     varchar(400)    NULL CONSTRAINT DF_VIAJE_COMENTARIO DEFAULT 'Sin comentario',
     PAGO_CON_TARJETA               bit             NOT NULL,
