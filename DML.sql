@@ -195,6 +195,22 @@ END;
 -- ##################################################
 -- ## TRIGGERS VIAJE
 -- ##################################################
+CREATE TRIGGER TR_VIAJE_HORA
+ON VIAJE
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    IF EXISTS (
+        SELECT ID_VIAJE 
+        FROM inserted
+        WHERE FECHA_INICIOVIAJE > DATEADD(HOUR, 2, GETDATE())
+    )
+    BEGIN
+        RAISERROR('Operación no permitida: el inicio del viaje tiene más de dos horas.');
+        ROLLBACK TRANSACTION;
+    END
+END
+GO
 
 
 -- ##################################################
