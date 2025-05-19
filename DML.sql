@@ -50,19 +50,7 @@ BEGIN
 		RAISERROR('El maximo de automoviles por conductor es 2',16,1);
 		ROLLBACK TRANSACTION;
 	END
-/*
-	IF EXISTS(
-		SELECT I.ID_AUTOMOVIL
-		FROM inserted AS I
-		JOIN USUARIOS.AUTOMOVIL AS A
-			ON I.ID_AUTOMOVIL=A.ID_AUTOMOVIL
-		WHERE I.ID_USUARIO!=A.ID_USUARIO
-	)
-	BEGIN
-		RAISERROR('El vehiculo ya esta registrado para otro conductor',16,1);
-		ROLLBACK TRANSACTION;
-	END
-*/
+
 	IF EXISTS(
 		SELECT 1
 		FROM inserted
