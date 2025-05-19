@@ -10,6 +10,8 @@
  * Target DBMS : Microsoft SQL Server 2008
  */
 
+ USE [APPSAFE]
+
 -- ##################################################
 -- ## TRIGGERS VIAJE_ESTATUS
 -- ##################################################
@@ -29,25 +31,26 @@
 -- ## TRIGGERS AUTO
 -- ##################################################
 
-CREATE TRIGGER TR_AUTO_AF1
+CREATE OR ALTER TRIGGER USUARIOS.TR_AUTO_FOR1
 ON USUARIOS.AUTOMOVIL
-BEFORE INSERT, UPDATE
+FOR INSERT, UPDATE
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	IF EXISTS(
-		SELECT ID_AUTOMOVIL 
-		FROM USUARIOS.AUTOMOVIL
-		WHERE ID_USUARIO IN (SELECT ID_USUARIO FROM inserted)
-		GROUP BY ID_USUARIO
-		HAVING COUNT(*)>2
+		SELECT I.ID_USUARIO
+		FROM inserted AS I
+		JOIN USUARIOS.AUTOMOVIL AS A
+		ON I.ID_USUARIO=A.ID_USUARIO
+		GROUP BY I.ID_USUARIO
+		HAVING COUNT(A.ID_USUARIO)>2
 	)
 	BEGIN
 		RAISERROR('El maximo de automoviles por conductor es 2',16,1);
 		ROLLBACK TRANSACTION;
 	END
-
+/*
 	IF EXISTS(
 		SELECT I.ID_AUTOMOVIL
 		FROM inserted AS I
@@ -59,14 +62,14 @@ BEGIN
 		RAISERROR('El vehiculo ya esta registrado para otro conductor',16,1);
 		ROLLBACK TRANSACTION;
 	END
-
+*/
 	IF EXISTS(
 		SELECT 1
 		FROM inserted
-		WHERE AÑO < YEAR(GETDATE()-5)
+		WHERE AÑO < YEAR(DATEADD(YEAR,-5,GETDATE()))
 	)
 	BEGIN
-		RAISERROR('El tiene más de 5 años de antiguedad',16,1);
+		RAISERROR('El automóvil tiene más de 5 años de antigüedad',16,1);
 		ROLLBACK TRANSACTION;
 	END
 
@@ -101,6 +104,46 @@ END;
 -- ## TRIGGERS PAGO
 -- ##################################################
 
+CREATE OR ALTER TRIGGER OPERACIONES.TR_PAGO_FOR1
+ON OPERACIONES.PAGO
+FOR INSERT
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	IF EXISTS(
+		SELECT 1
+		FROM inserted AS I
+		JOIN OPERACIONES.PAGO AS P
+		ON I.ID_USUARIO=P.ID_USUARIO
+		AND DATEPART(YEAR, P.FECHA)=DATEPART(YEAR, I.FECHA)
+		AND DATEPART(ISOWK, P.FECHA)= DATEPART(ISOWK, I.FECHA)
+	)
+	BEGIN
+		RAISERROR('Ya existe un pago para este usuario en la semana especificada',16,1);
+		ROLLBACK TRANSACTION;
+	END;
+
+END;
+
+CREATE OR ALTER TRIGGER OPERACIONES.TR_PAGO_INOF1
+ON OPERACIONES.PAGO
+INSTEAD OF INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO OPERACIONES.PAGO(ID_USUARIO, FOLIO, MONTO, FECHA)
+    SELECT 
+        I.ID_USUARIO,
+        RIGHT('00000000' + CAST(ISNULL(MAX(CAST(p.FOLIO AS INT)), 0) + ROW_NUMBER() OVER (PARTITION BY I.ID_USUARIO ORDER BY I.ID_USUARIO) AS VARCHAR(8)), 8),
+        I.MONTO,
+        I.FECHA
+    FROM inserted AS I
+    LEFT JOIN OPERACIONES.PAGO AS P
+        ON I.ID_USUARIO = P.ID_USUARIO
+    GROUP BY I.ID_USUARIO, I.MONTO, I.FECHA;
+END;
 
 -- ##################################################
 -- ## TRIGGERS QUEJA
@@ -115,6 +158,28 @@ END;
 -- ##################################################
 -- ## TRIGGERS TARJETA
 -- ##################################################
+
+CREATE OR ALTER TRIGGER USUARIOS.TR_TARJETA_FOR1
+ON USUARIOS.TARJETA
+FOR INSERT, UPDATE
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	IF EXISTS(
+		SELECT I.ID_USUARIO
+		FROM inserted AS I
+		JOIN USUARIOS.TARJETA AS T
+		ON I.ID_USUARIO=T.ID_USUARIO
+		GROUP BY I.ID_TARJETA
+		HAVING COUNT(T.ID_TARJETA)>3
+	)
+	BEGIN 
+		RAISERROR('Se excedio el número maximo de tarjetas permitidas', 16,1);
+		ROLLBACK TRANSACTION;
+	END
+
+END;
 
 
 -- ##################################################
