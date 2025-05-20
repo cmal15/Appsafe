@@ -7,13 +7,47 @@
  */
 
  USE [APPSAFE]
-
+ 
 /*
  * 1. Viajes diarios por conductor; datos del conductor, numero de viajes, monto total, este informe debe poder
  * obtener por un periodo de tiempo
 */
 
+CREATE PROCEDURE OBTENER_DATOS_CONDUCTOR
+	@FECHA_INICIO DATE,
+	@FECHA_FIN DATE
+AS
+BEGIN
 
+    WITH VIAJES_POR_CONDUCTOR AS (
+        SELECT 
+            C.ID_USUARIO,
+            COUNT(V.ID_VIAJE) AS NUMERO_DE_VIAJES,
+            SUM(V.IMPORTE) AS MONTO
+        FROM USUARIOS.CONDUCTOR AS C
+        JOIN USUARIOS.AUTOMOVIL AS A ON A.ID_USUARIO = C.ID_USUARIO
+        JOIN OPERACIONES.VIAJE AS V ON V.ID_AUTOMOVIL = A.ID_AUTOMOVIL
+        WHERE V.FECHA_INICIOVIAJE BETWEEN @FECHA_INICIO AND @FECHA_FIN
+        GROUP BY C.ID_USUARIO
+    )
+
+
+    SELECT 
+        C.ID_USUARIO, 
+        C.DESCRIPCION,
+        C.LICENCIA,
+        C.VIGENCIA AS VIGENCIA_LICENCIA,
+        U.NOMBRE_USUARIO,
+        U.NOMBRE,
+        U.APELLIDO1 AS PATERNO,
+        U.APELLIDO2 AS MATERNO,
+        U.CORREO,
+        VPC.NUMERO_DE_VIAJES,
+        VPC.MONTO
+    FROM VIAJES_POR_CONDUCTOR AS VPC
+    JOIN USUARIOS.CONDUCTOR AS C ON C.ID_USUARIO = VPC.ID_USUARIO
+    JOIN USUARIOS.USUARIO AS U ON U.ID_USUARIO = C.ID_USUARIO;
+END;
 
 /*
  * 2. Consolidado mensual; día, monto total, monto mensual
