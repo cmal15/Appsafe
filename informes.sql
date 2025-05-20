@@ -6,10 +6,13 @@
  *
  */
 
+ USE [APPSAFE]
+
 /*
  * 1. Viajes diarios por conductor; datos del conductor, numero de viajes, monto total, este informe debe poder
  * obtener por un periodo de tiempo
 */
+
 
 
 /*
