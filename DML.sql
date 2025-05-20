@@ -130,7 +130,30 @@ END;
 -- ##################################################
 -- ## TRIGGERS VIAJE
 -- ##################################################
-
+ALTER SCHEMA OPERACIONES TRANSFER dbo.VIAJE;
+go
+CREATE TRIGGER FechaInicioViaje
+ON operaciones.viaje
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+	DECLARE @vID BIGINT,
+			@iIDStatus varchar(100),
+			@dIDStatus varchar(100)
+	SELECT @vID= ID_viaje FROM deleted 
+	select @iIDStatus=ID_ESTATUS FROM inserted
+	select @dIDStatus=ID_ESTATUS FROM deleted
+    -- Actualiza solo los viajes que cambiaron a estado 3 (En Curso) falta confirmarlo
+	if @iIDStatus='3' and @iIDStatus <> @dIDStatus
+		begin
+	UPDATE OPERACIONES.VIAJE
+    SET FECHA_INICIOVIAJE = GETDATE()
+    FROM OPERACIONES.VIAJE
+	WHERE ID_VIAJE=@vID
+	end
+END
+GO
 
 -- ##################################################
 -- ## TRIGGERS VIAJE_ESTATUS
