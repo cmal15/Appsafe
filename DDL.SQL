@@ -86,7 +86,7 @@ go
 
 CREATE TABLE BANCO(
     ID_BANCO    tinyint        NOT NULL,
-    NOMBRE      varchar(40)    NOT NULL,
+    NOMBRE      varchar(40)    NOT NULL UNIQUE,
     CONSTRAINT PK_BANCO PRIMARY KEY NONCLUSTERED (ID_BANCO)
 )
 go
@@ -105,7 +105,7 @@ go
 
 CREATE TABLE CATALOGO_ACCIDENTES(
     ID_TIPO_ACCIDENTE    int            NOT NULL,
-    TIPO                 varchar(40)    NOT NULL,
+    TIPO                 varchar(40)    NOT NULL UNIQUE,
     CONSTRAINT PK_CATALOGO_ACCIDENTES PRIMARY KEY NONCLUSTERED (ID_TIPO_ACCIDENTE)
 )
 go
@@ -124,7 +124,7 @@ go
 
 CREATE TABLE CATALOGO_QUEJAS(
     ID_CATALOGO_QUEJAS    int            NOT NULL,
-    MOTIVO                varchar(40)    NOT NULL,
+    MOTIVO                varchar(40)    NOT NULL UNIQUE,
     CONSTRAINT PK_CATALOGO_QUEJAS PRIMARY KEY NONCLUSTERED (ID_CATALOGO_QUEJAS)
 )
 go
@@ -144,7 +144,7 @@ go
 CREATE TABLE CLIENTE(
     ID_USUARIO               int                  NOT NULL,
     RFC                      varchar(13)          NULL,
-    CELULAR                  varchar(13)          NOT NULL,
+    CELULAR                  varchar(13)          NOT NULL UNIQUE,
     FECHA_REGISTRO           date                 NOT NULL,
     DIRECCION_FACTURACION    varchar(40)          NOT NULL,
     CONSTRAINT PK_CLIENTE PRIMARY KEY NONCLUSTERED (ID_USUARIO),
@@ -160,7 +160,7 @@ go
 
 CREATE TABLE ESTADO (
 	ID_ESTADO			int				IDENTITY(1,1)	NOT NULL, 
-	NOMBRE_ESTADO		varchar(50)						NOT NULL, 
+	NOMBRE_ESTADO		varchar(50)						NOT NULL UNIQUE, 
 	CONSTRAINT PK_ESTADO PRIMARY KEY (ID_ESTADO),
 )
 
@@ -272,7 +272,7 @@ go
 
 CREATE TABLE ESTATUS(
     ID_ESTATUS             tinyint     NOT NULL,
-    NOMBRE_ESTATUS  varchar(40)    NOT NULL,
+    NOMBRE_ESTATUS         varchar(40)    NOT NULL UNIQUE,
     CONSTRAINT PK_ESTATUS PRIMARY KEY NONCLUSTERED (ID_ESTATUS),
     CONSTRAINT CK4_ESTATUS_NOMBRE CHECK (NOMBRE_ESTATUS IN ('SOLICITADO','PROGRAMADO','CONFIRMADO','EN CURSO',
                 'TERMINADO', 'POR COBRAR', 'PAGADO', 'CON ADEUDO', 'CANCELADO'))
@@ -314,7 +314,7 @@ go
 
 CREATE TABLE MARCA(
     ID_MARCA        int            NOT NULL,
-    NOMBRE_MARCA    varchar(40)    NOT NULL,
+    NOMBRE_MARCA    varchar(40)    NOT NULL UNIQUE,
     CONSTRAINT PK_MARCA PRIMARY KEY NONCLUSTERED (ID_MARCA)
 )
 go
@@ -333,7 +333,7 @@ go
 
 CREATE TABLE MODELO(
     ID_MODELO        int            NOT NULL,
-    NOMBRE_MODELO    varchar(40)    NOT NULL,
+    NOMBRE_MODELO    varchar(40)    NOT NULL UNIQUE,
     ID_MARCA         int            NOT NULL,
     CONSTRAINT PK_MODELO PRIMARY KEY NONCLUSTERED (ID_MODELO)
 )
