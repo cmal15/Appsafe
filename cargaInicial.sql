@@ -40,9 +40,9 @@ COMMIT TRANSACTION
 
 BEGIN TRANSACTION
 INSERT INTO USUARIOS.ADMINISTRADOR(ID_USUARIO, FECHA_INGRESO)
-VALUES (1, ),
-	(1, ),
-	(1, )
+VALUES (1, '2024-06-21'),
+	(2, '2024-06-21'),
+	(3, '2024-06-21')
 COMMIT TRANSACTION
 
 -- ##################################################
@@ -50,10 +50,10 @@ COMMIT TRANSACTION
 -- ##################################################
 
 BEGIN TRANSACTION
-INSERT INTO USUARIOS.ADMINISTRADOR(ID_USUARIO, TELEFONO)
-VALUES (),
-	(),
-	()
+INSERT INTO USUARIOS.TELEFONO(ID_USUARIO, TELEFONO)
+VALUES (1, '5555555555'),
+	(2, '5534346767'),
+	(3, '1123581321')
 COMMIT TRANSACTION
 
 -- ##################################################
@@ -136,7 +136,10 @@ COMMIT TRANSACTION
 -- ##					USUARIO					#####
 -- ##################################################
 insert into usuarios.usuario (ID_USUARIO, ID_RECOMENDANTE,ES_ADMINISTRADOR,ES_CONDUCTOR, ES_CLIENTE,CONTRASEÑA,NOMBRE_USUARIO,CORREO,NOMBRE,APELLIDO1,APELLIDO2)
-	values  (4, NULL, 0, 1, 0, '123Admin1*', 'admin_user', 'admin@example.com', 'Carlos', 'Pérez', NULL),
+	values  (1, NULL, 1, 0, 0, 'lorem4', 'CCGREEN', 'green@example.com', 'Alan', 'Turing', NULL),
+			(2, NULL, 1, 0, 0, 'ipsum*', 'GGMur', 'germ@example.com', 'Jonh', 'Doe', 'Second'),
+			(3, NULL, 1, 0, 0, '3sterno', 'ERB', 'justice@example.com', 'Ada', 'Lovelance', NULL),
+			(4, NULL, 0, 1, 0, '123Admin1*', 'admin_user', 'admin@example.com', 'Carlos', 'Pérez', NULL),
 			(5, 4, 0, 1, 0, 'Driver456#', 'driver_luis', 'luis@transporte.com', 'Luis', 'Martínez', 'Gómez'),
 			(6, NULL, 0, 1, 0, 'Client789&', 'cliente_ana', 'ana@email.com', 'Ana', 'López', NULL),
 			(7, 5, 0, 1, 0, 'Mix123&', 'usuario_mixto', 'mix@ejemplo.com', 'Jorge', 'Ramírez', 'Díaz'),
@@ -200,21 +203,29 @@ go
 -- ##################################################
 
 BEGIN TRANSACTION
-INSERT INTO OPERACIONES.DESCUENTO()
-VALUES (),
-	(),
-	()
+INSERT INTO OPERACIONES.DESCUENTO(ID_DESCUENTO, FECHA_INICIO, FECHA_FIN, MONTO, ORIGEN)
+VALUES (1, '2025-05-20', '2025-06-20', 50, 'ANIVERSARIO'),
+	(2, '2025-05-25', '2025-06-20', 50, 'OFERTA FLASH'),
+	(3, '2025-05-20', '2025-05-25', 50, 'RECOMENDACION'),
 COMMIT TRANSACTION
 
 -- ##################################################
 -- ##					 ESTATUS				#####
 -- ##################################################
+    CONSTRAINT CK4_ESTATUS_NOMBRE CHECK (NOMBRE_ESTATUS IN ('SOLICITADO','PROGRAMADO','CONFIRMADO','EN CURSO',
+                'TERMINADO', 'POR COBRAR', 'PAGADO', 'CON ADEUDO', 'CANCELADO'))
 
 BEGIN TRANSACTION
-INSERT INTO CATALOGO.ESTATUS()
-VALUES (),
-	(),
-	()
+INSERT INTO CATALOGO.ESTATUS(ID_ESTATUS, NOMBRE_ESTATUS)
+VALUES (1, 'SOLICITADO'),
+	(2,'PROGRAMADO'),
+	(3,'CONFIRMADO'),
+	(4,'EN CURSO'),
+	(5,'TERMINADO'),
+	(6,'POR COBRAR'),
+	(7,'PAGADO'),
+	(8,'CON ADEUDO'),
+	(9,'CANCELADO')
 COMMIT TRANSACTION
 
 --###################################################
@@ -222,9 +233,9 @@ COMMIT TRANSACTION
 -- ##################################################
 
 BEGIN TRANSACTION
-INSERT INTO CATALOGO.CATALOGO_QUEJAS()
-VALUES (),
-	(),
-	(),
-	()
+INSERT INTO CATALOGO.CATALOGO_QUEJAS(ID_CATALOGO_QUEJAS, MOTIVO)
+VALUES (1, 'GROSERO'),
+	(2, 'LENTO'),
+	(3, 'SUCIO'),
+	(4, 'FUMADOR')
 COMMIT TRANSACTION
