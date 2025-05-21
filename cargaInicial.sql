@@ -4,6 +4,12 @@
  * Authors :      Alvarez Lopez Carlos Manuel
 				  Membrilla Isaias Iñaki Ramos
 				  Miramón Pérez Jocelyn
+
+3 descuentos (Carlos)
+3 admins {3 teléfonos} (Carlos)
+3 catalogo_accidentes (Carlos)
+6 estatus (Carlos)
+4 catalogo_quejas (Carlos)
  */
 
  -------************* INSERCIONES ******************-------
@@ -17,9 +23,38 @@
 -- ##################################################
 
 
+--##################################################
+-- ###				CATALOGO_ACCIDENTE			#####
+-- ##################################################
+
+BEGIN TRANSACTION
+INSERT INTO CATALOGOS.CATALOGO_ACCIDENTE(ID_TIPO_ACCIDENTE, TIPO)
+VALUES (1, 'Colisión frontal'),
+	(2, 'Colisión lateral'),
+	(3, 'Colisión trasera')
+COMMIT TRANSACTION
+
 -- ##################################################
 -- ##			 ADMINISTRADOR					#####
 -- ##################################################
+
+BEGIN TRANSACTION
+INSERT INTO USUARIOS.ADMINISTRADOR(ID_USUARIO, FECHA_INGRESO)
+VALUES (1, ),
+	(1, ),
+	(1, )
+COMMIT TRANSACTION
+
+-- ##################################################
+-- ##			 TELEFONO						#####
+-- ##################################################
+
+BEGIN TRANSACTION
+INSERT INTO USUARIOS.ADMINISTRADOR(ID_USUARIO, TELEFONO)
+VALUES (),
+	(),
+	()
+COMMIT TRANSACTION
 
 -- ##################################################
 -- ###  				AUTO					#####
@@ -92,3 +127,36 @@
 -- ##################################################
 
 
+-- ##################################################
+-- ##					 DESCUENTO				#####
+-- ##################################################
+
+BEGIN TRANSACTION
+INSERT INTO OPERACIONES.DESCUENTO()
+VALUES (),
+	(),
+	()
+COMMIT TRANSACTION
+
+-- ##################################################
+-- ##					 ESTATUS				#####
+-- ##################################################
+
+BEGIN TRANSACTION
+INSERT INTO CATALOGO.ESTATUS()
+VALUES (),
+	(),
+	()
+COMMIT TRANSACTION
+
+--###################################################
+-- ###				CATALOGO_QUEJAS 			#####
+-- ##################################################
+
+BEGIN TRANSACTION
+INSERT INTO CATALOGO.CATALOGO_QUEJAS()
+VALUES (),
+	(),
+	(),
+	()
+COMMIT TRANSACTION
