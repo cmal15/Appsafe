@@ -11,7 +11,7 @@
  */
 
  USE [APPSAFE]
-
+ GO
 -- ##################################################
 -- ## TRIGGERS VIAJE_ESTATUS
 -- ##################################################
@@ -21,14 +21,16 @@
 -- ## TRIGGERS ACCIDENTE
 -- ##################################################
 
+--TODO FOR DELETE: VIAJE-ACCIDENTE
 
 -- ##################################################
 -- ## TRIGGERS ADMINISTRADOR
 -- ##################################################
 
+--TODO FOR DELETE: QUEJA
 
 -- ##################################################
--- ## TRIGGERS AUTO
+-- ## TRIGGERS AUTOMOVIL
 -- ##################################################
 
 CREATE OR ALTER TRIGGER USUARIOS.TR_AUTO_FOR1
@@ -62,16 +64,23 @@ BEGIN
 	END
 
 END;
+GO
+
+-- TODO FOR DELETE: VIAJE
+-- TODO FOR UPDATE: VIAJE
 
 -- ##################################################
 -- ## TRIGGERS CLIENTE
 -- ##################################################
 
+-- TODO FOR DELETE: FACTURA, TARJETA, VIAJE
+-- TODO FOR UPDATE: VIAJE
 
 -- ##################################################
 -- ## TRIGGERS CONDUCTOR
 -- ##################################################
 
+-- TODO FOR DELETE: AUTOMOVIL
 
 -- ##################################################
 -- ## TRIGGERS VIAJE_ESTATUS
@@ -82,11 +91,7 @@ END;
 -- ## TRIGGERS FACTURA
 -- ##################################################
 
-
--- ##################################################
--- ## TRIGGERS MODELO
--- ##################################################
-
+-- TODO FOR UPDATE: VIAJE
 
 -- ##################################################
 -- ## TRIGGERS PAGO
@@ -113,6 +118,7 @@ BEGIN
 	END;
 
 END;
+GO
 
 CREATE OR ALTER TRIGGER OPERACIONES.TR_PAGO_INOF1
 ON OPERACIONES.PAGO
@@ -132,6 +138,7 @@ BEGIN
         ON I.ID_USUARIO = P.ID_USUARIO
     GROUP BY I.ID_USUARIO, I.MONTO, I.FECHA;
 END;
+GO
 
 -- ##################################################
 -- ## TRIGGERS QUEJA
@@ -168,7 +175,9 @@ BEGIN
 	END
 
 END;
+GO
 
+-- TODO FOR UPDATE: VIAJE
 
 -- ##################################################
 -- ## TRIGGERS TELEFONO
@@ -179,6 +188,8 @@ END;
 -- ## TRIGGERS USUARIO
 -- ##################################################
 
+-- TODO FOR DELETE: DESCUENTO_USUARIO_VIAJE, USUARIO_RECOMENDANTE
+-- TODO FOR UPDATE: USUARIO_RECOMENDANTE
 
 -- ##################################################
 -- ## TRIGGERS VIAJE
@@ -204,7 +215,7 @@ BEGIN
     FROM OPERACIONES.VIAJE
 	WHERE ID_VIAJE=@vID
 	end
-END
+END;
 GO
 
 CREATE OR ALTER TRIGGER TR_VIAJE_HORA
@@ -224,8 +235,55 @@ BEGIN
 END;
 GO
 
+-- TODO FOR DELETE: ACCIDENTE, QUEJA
 
 -- ##################################################
 -- ## TRIGGERS VIAJE_ESTATUS
 -- ##################################################
 
+
+
+-- ##################################################
+-- ## TRIGGERS CATALOGO_ACCIDENTES
+-- ##################################################
+
+--TODO FOR DELETE: ACCIDENTE
+
+
+-- ##################################################
+-- ## TRIGGERS MODELO
+-- ##################################################
+
+-- TODO FOR DELETE: AUTOMOVIL
+
+-- ##################################################
+-- ## TRIGGERS DESCUENTO
+-- ##################################################
+
+-- TODO FOR DELETE: DESCUENTO_USUARIO_VIAJE
+
+
+-- ##################################################
+-- ## TRIGGERS CATALOGO_QUEJAS
+-- ##################################################
+
+-- TODO FOR DELETE: QUEJA
+
+-- ##################################################
+-- ## TRIGGERS BANCO
+-- ##################################################
+
+-- TODO FOR DELETE: TARJETA
+
+-- ##################################################
+-- ## TRIGGERS ESTATUS
+-- ##################################################
+
+-- TODO FOR DELETE: VIAJE_ESTATUS, VIAJE
+
+-- ##################################################
+-- ## TRIGGERS DESCUENTO_USUARIO_VIAJE
+-- ##################################################
+
+-- TODO FOR DELETE: VIAJE
+-- TODO FOR UPDATE: VIAJE
