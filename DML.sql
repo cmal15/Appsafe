@@ -159,7 +159,7 @@ BEGIN
 		FROM inserted AS I
 		JOIN USUARIOS.TARJETA AS T
 		ON I.ID_USUARIO=T.ID_USUARIO
-		GROUP BY I.ID_TARJETA
+		GROUP BY I.ID_USUARIO
 		HAVING COUNT(T.ID_TARJETA)>3
 	)
 	BEGIN 
@@ -184,9 +184,7 @@ END;
 -- ## TRIGGERS VIAJE
 -- ##################################################
 
-ALTER SCHEMA OPERACIONES TRANSFER dbo.VIAJE;
-go
-CREATE TRIGGER FechaInicioViaje
+CREATE OR ALTER TRIGGER FechaInicioViaje
 ON operaciones.viaje
 AFTER UPDATE
 AS
@@ -209,8 +207,8 @@ BEGIN
 END
 GO
 
-CREATE TRIGGER TR_VIAJE_HORA
-ON VIAJE
+CREATE OR ALTER TRIGGER TR_VIAJE_HORA
+ON OPERACIONES.VIAJE
 AFTER INSERT, UPDATE
 AS
 BEGIN
@@ -220,10 +218,10 @@ BEGIN
         WHERE FECHA_INICIOVIAJE > DATEADD(HOUR, 2, GETDATE())
     )
     BEGIN
-        RAISERROR('Operación no permitida: el inicio del viaje tiene más de dos horas.');
+        RAISERROR('Operación no permitida: el inicio del viaje tiene más de dos horas.',16,1);
         ROLLBACK TRANSACTION;
     END
-END
+END;
 GO
 
 
