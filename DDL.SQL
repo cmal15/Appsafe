@@ -505,7 +505,7 @@ CREATE TABLE VIAJE(
     ID_TARJETA                     int             NULL,
     ID_USUARIO                     int             NOT NULL,
     ID_FACTURA                     int			   NULL,
-    ID_AUTOMOVIL                   int             NOT NULL,
+    ID_AUTOMOVIL                   int             NULL,
     ID_DESCUENTO                   int             NULL,
     CONSTRAINT PK_VIAJE PRIMARY KEY NONCLUSTERED (ID_VIAJE),
     CONSTRAINT CK5_VIAJE_CALIFICACION CHECK (CALIFICACION <= 5 AND CALIFICACION >= 0),

@@ -356,6 +356,23 @@ go
 -- ##					 VIAJE					#####
 -- ##################################################
 
+INSERT INTO OPERACIONES.VIAJE(ID_VIAJE, FECHA_INICIOVIAJE,)
+VALUES (1,),
+	(2,),
+	(3,),
+	(4,),
+	(5,),
+	(6,),
+	(7,),
+	(8,),
+	(9,),
+	(10,),
+	(11,),
+	(12,),
+	(13,),
+	(14,),
+	(15,);
+GO
 
 -- ##################################################
 -- ##					 DESCUENTO				#####
@@ -371,8 +388,6 @@ COMMIT TRANSACTION
 -- ##################################################
 -- ##					 ESTATUS				#####
 -- ##################################################
-    CONSTRAINT CK4_ESTATUS_NOMBRE CHECK (NOMBRE_ESTATUS IN ('SOLICITADO','PROGRAMADO','CONFIRMADO','EN CURSO',
-                'TERMINADO', 'POR COBRAR', 'PAGADO', 'CON ADEUDO', 'CANCELADO'))
 
 BEGIN TRANSACTION
 INSERT INTO CATALOGO.ESTATUS(ID_ESTATUS, NOMBRE_ESTATUS)
