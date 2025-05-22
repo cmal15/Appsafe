@@ -14,25 +14,77 @@
 
  -------************* INSERCIONES ******************-------
 
- --##################################################
--- ###				VIAJE_ESTATUS				#####
 -- ##################################################
-
- --##################################################
--- ###				ACCIDENTE					#####
--- ##################################################
-
-
---##################################################
--- ###				CATALOGO_ACCIDENTE			#####
+-- ##					 DESCUENTO				#####
 -- ##################################################
 
 BEGIN TRANSACTION
-INSERT INTO CATALOGOS.CATALOGO_ACCIDENTE(ID_TIPO_ACCIDENTE, TIPO)
-VALUES (1, 'Colisión frontal'),
-	(2, 'Colisión lateral'),
-	(3, 'Colisión trasera')
+INSERT INTO OPERACIONES.DESCUENTO(ID_DESCUENTO, FECHA_INICIO, FECHA_FIN, MONTO, ORIGEN)
+VALUES (1, '2025-05-20', '2025-06-20', 50, 'ANIVERSARIO'),
+	(2, '2025-05-25', '2025-06-20', 50, 'OFERTA FLASH'),
+	(3, '2025-05-20', '2025-05-25', 50, 'RECOMENDACION'),
 COMMIT TRANSACTION
+
+-- ##################################################
+-- ##					 ESTATUS				#####
+-- ##################################################
+
+BEGIN TRANSACTION
+INSERT INTO CATALOGO.ESTATUS(ID_ESTATUS, NOMBRE_ESTATUS)
+VALUES (1, 'SOLICITADO'),
+	(2,'PROGRAMADO'),
+	(3,'CONFIRMADO'),
+	(4,'EN CURSO'),
+	(5,'TERMINADO'),
+	(6,'POR COBRAR'),
+	(7,'PAGADO'),
+	(8,'CON ADEUDO'),
+	(9,'CANCELADO')
+COMMIT TRANSACTION
+
+--###################################################
+-- ###				CATALOGO_QUEJAS 			#####
+-- ##################################################
+
+BEGIN TRANSACTION
+INSERT INTO CATALOGO.CATALOGO_QUEJAS(ID_CATALOGO_QUEJAS, MOTIVO)
+VALUES (1, 'GROSERO'),
+	(2, 'LENTO'),
+	(3, 'SUCIO'),
+	(4, 'FUMADOR')
+COMMIT TRANSACTION
+
+-- ##################################################
+-- ##					USUARIO					#####
+-- ##################################################
+insert into usuarios.usuario (ID_USUARIO, ID_RECOMENDANTE,ES_ADMINISTRADOR,ES_CONDUCTOR, ES_CLIENTE,CONTRASEÑA,NOMBRE_USUARIO,CORREO,NOMBRE,APELLIDO1,APELLIDO2)
+	values  (1, NULL, 1, 0, 0, 'lorem4', 'CCGREEN', 'green@example.com', 'Alan', 'Turing', NULL),
+			(2, NULL, 1, 0, 0, 'ipsum*', 'GGMur', 'germ@example.com', 'Jonh', 'Doe', 'Second'),
+			(3, NULL, 1, 0, 0, '3sterno', 'ERB', 'justice@example.com', 'Ada', 'Lovelance', NULL),
+			(4, NULL, 0, 1, 0, '123Admin1*', 'admin_user', 'admin@example.com', 'Carlos', 'Pérez', NULL),
+			(5, 4, 0, 1, 0, 'Driver456#', 'driver_luis', 'luis@transporte.com', 'Luis', 'Martínez', 'Gómez'),
+			(6, NULL, 0, 1, 0, 'Client789&', 'cliente_ana', 'ana@email.com', 'Ana', 'López', NULL),
+			(7, 5, 0, 1, 0, 'Mix123&', 'usuario_mixto', 'mix@ejemplo.com', 'Jorge', 'Ramírez', 'Díaz'),
+			(8, NULL, 0, 1, 0, 'Cont23*', 'client_maria', 'maria@clientes.com', 'María', 'Santos', 'Delgado');
+
+-- ##################################################
+-- ###				CONDUCTOR					#####
+-- ##################################################
+insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
+	select '4','1234ABCD','2025-05-25','descripción ingeniosa 4', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor4.png', Single_Blob) As ProductosFoto
+	go
+insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
+	select '5','6852AZCY','2025-05-25','descripción mas ingeniosa', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor5.png', Single_Blob) As ProductosFoto
+	go
+insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
+	select '6','4678JHSJ','2025-05-25','descripción  menos ingeniosa ', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor6.png', Single_Blob) As ProductosFoto
+go
+insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
+	select '7','1569KLAS','2025-05-25','descripción algo ingeniosa', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor7.png', Single_Blob) As ProductosFoto
+go
+insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
+	select '8','4568USAD','2025-05-25','descripción', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor8.png', Single_Blob) As ProductosFoto
+go
 
 -- ##################################################
 -- ##			 ADMINISTRADOR					#####
@@ -57,6 +109,59 @@ VALUES (1, '5555555555'),
 COMMIT TRANSACTION
 
 -- ##################################################
+-- ##				TARJETA						#####
+-- ##################################################
+
+INSERT INTO TARJETA (ID_TARJETA, VIGENCIA, NUMERO, ID_BANCO, ID_USUARIO)
+VALUES
+  (1, '2026-05-31', '4539578763451234', 1, 1),
+  (2, '2026-12-31', '5520137890123456', 2, 2),
+  (3, '2027-07-15', '6011000990139424', 3, 3),
+  (4, '2025-11-30', '3566002020360505', 4, 4),
+  (5, '2028-03-31', '5105105105105100', 5, 5),
+  (6, '2029-09-30', '4111111111111111', 6, 6),
+  (7, '2026-06-30', '6011111111111117', 7, 7),
+  (8, '2027-10-31', '3782822463100050', 8, 8);
+
+
+
+--##################################################
+-- ###				CATALOGO_ACCIDENTE			#####
+-- ##################################################
+
+BEGIN TRANSACTION
+INSERT INTO CATALOGOS.CATALOGO_ACCIDENTE(ID_TIPO_ACCIDENTE, TIPO)
+VALUES (1, 'Colisión frontal'),
+	(2, 'Colisión lateral'),
+	(3, 'Colisión trasera')
+COMMIT TRANSACTION
+
+-- ##################################################
+-- ##					 MARCA					#####
+-- ##################################################
+
+	insert into CATALOGOS.MARCA (ID_MARCA, NOMBRE_MARCA)
+	values  (1,'Toyota'),
+			(2,'Ford'),
+			(3,'BMW');
+
+-- ##################################################
+-- ##				MODELO						#####
+-- ##################################################
+
+	insert into CATALOGOS.MODELO (ID_MODELO, NOMBRE_MODELO, ID_MARCA)
+	values  (1, 'Corolla', 1),
+			(2, 'Camry', 1),
+			(3, 'RAV4', 1),
+			(4, 'Mustang', 2),
+			(5, 'F-150', 2),
+			(6, 'Explorer', 2),
+			(7, 'X5', 3),
+			(8, 'Serie 3', 3),
+			(9, 'i4', 3);
+	
+
+-- ##################################################
 -- ###  				AUTO					#####
 -- ##################################################
 	insert into USUARIOS.automovil (ID_AUTOMOVIL,NUMPLACAS,AÑO,ID_USUARIO,ID_MODELO)
@@ -66,6 +171,34 @@ COMMIT TRANSACTION
 			(4, 'QRS3456', 2019, 7, 2),
 			(5, 'TUV7890', 2021, 8, 8);
 
+-- ##################################################
+-- ###					PAGO					#####
+-- ##################################################
+	insert into OPERACIONES.PAGO(ID_USUARIO,FOLIO,MONTO,FECHA)
+			--pagos para ID 4
+	values  (4, 1, 3200, '2025-04-28'),
+			(4, 2, 4800, '2025-05-05'),
+			(4, 3, 3500, '2025-05-12'),
+
+			-- Pagos para ID 5
+			(5, 1, 3100, '2025-04-28'),
+			(5, 2, 4950, '2025-05-05'),
+			(5, 3, 3700, '2025-05-12'),
+
+			-- Pagos para ID 6
+			(6, 1, 4600, '2025-04-28'),
+			(6, 2, 3300, '2025-05-05'),
+			(6, 3, 4100, '2025-05-12'),
+
+			-- Pagos para ID 7
+			(7, 1, 3000, '2025-04-28'),
+			(7, 2, 4500, '2025-05-05'),
+			(7, 3, 3850, '2025-05-12'),
+
+			-- Pagos para ID 8
+			(8, 1, 5000, '2025-04-28'),
+			(8, 2, 3900, '2025-05-05'),
+			(8, 3, 3400, '2025-05-12');
 
 -- ##################################################
 -- ###  				ESTADO					#####
@@ -242,37 +375,250 @@ VALUES
   (7, '2026-06-30', '6011111111111117', 7, 7),
   (8, '2027-10-31', '3782822463100050', 8, 8);
 
--- ##################################################
--- ###				FACTURA						#####
--- ##################################################
-
 
 -- ##################################################
--- ##					 MARCA					#####
+-- ##					 VIAJE					#####
 -- ##################################################
 
-	insert into CATALOGOS.MARCA (ID_MARCA, NOMBRE_MARCA)
-	values  (1,'Toyota'),
-			(2,'Ford'),
-			(3,'BMW');
+INSERT INTO OPERACIONES.VIAJE((1) ID_VIAJE, (2) FECHA_INICIOVIAJE, (3) ORIGEN_LONGITUD, (4) ORIGEN_LATITUD,
+							(5) DESTINO_LONGITUD, (6) DESTINO_LATITUD, (7) IMPORTE, (8) PROPINA, (9) ADEUDO,
+                            (10) CALIFICACION_CONDUCTOR, (11) CALIFICACION_CLIENTE, (12) COMENTARIO, 
+                            (13) PAGO_CON_TARJETA, (14) ID_ESTATUS, (15) ID_TARJETA, (16) ID_USUARIO, (17) ID_FACTURA,
+                            (18) ID_AUTOMOVIL, (19) ID_DESCUENTO)
 
--- ##################################################
--- ##				MODELO						#####
+--15 viajes completos
+VALUES 	(1, '2025-05-23', -99.120200, 19.508300, -99.133209, 19.432608, 331, 10, 0.00, 2, 2, 'Viaje caro y tardado.', 1, 5, 1, 1, NULL, 1, NULL),
+  			(2, '2025-05-23', -99.200500, 19.489100, -99.120200, 19.508300, 320, 15, 0.00, 1, 2, 'Mala actitud del conductor.', 1, 5, 2, 2, NULL, 2, NULL),
+  			(3, '2025-05-23', -99.174600, 19.493900, -99.200500, 19.489100, 123, 20, 0.00, 2, 3, 'El auto estaba sucio.', 1, 5, 3, 3, NULL, 3, NULL),
+  			(4, '2025-05-23', -99.175300, 19.378600, -99.174600, 19.493900, 112, 10, 0.00, 2, 2, 'No conocía la ruta.', 1, 5, 4, 4, NULL, 4, NULL),
+  			(5, '2025-05-23', -99.139600, 19.455900, -99.175300, 19.378600, 358, 15, 0.00, 1, 2, 'Tardó demasiado en llegar.', 1, 5, 5, NULL, NULL, 5, NULL),
+  			(6, '2025-05-23', -99.161700, 19.288300, -99.139600, 19.455900, 98.23, 20, 0.00, 2, 1,'Conductor muy distraído.', 1, 5, 6, 6, NULL, 1, NULL),
+  			(7, '2025-05-23', -99.071900, 19.436100, -99.161700, 19.288300, 332, 15, 0.00, 3, 2, 'Viaje incómodo y ruidoso.', 1, 5, 7, 7, NULL, 2, NULL),
+
+  			(8, '2025-05-23', -99.200800, 19.433400, -99.071900, 19.436100, 237, 20, 0.00, 5, 5, 'Excelente trato y puntualidad.', 1, 5, 8, 8, NULL, 1, NULL),
+  			(9, '2025-05-23', -99.270000, 19.360000, -99.200800, 19.433400, 420, 20, 0.00, 5, 5, 'Muy buen servicio, gracias.', 1, 5, 1, 1, NULL, 2, NULL),
+  			(10, '2025-05-23', -99.152000, 19.416000, -99.270000, 19.360000, 230, 15, 0.00, 4, 5, 'Conductor amable y eficiente.', 1, 5, 2, 2, NULL, 3, NULL),
+  			(11, '2025-05-23', -99.096300, 19.267300, -99.152000, 19.416000, 106, 15, 0.00, 4, 4, 'Auto limpio y cómodo.', 1, 5, 3, 3, NULL, 4, NULL),
+  			(12, '2025-05-23', -99.186000, 19.332200, -99.096300, 19.267300, 89, 15, 0.00, 5, 5, 'Todo salió perfecto.', 1, 5, 4, 4, NULL, 5, NULL),
+  			(13, '2025-05-23', -99.162703, 19.346679, -99.186000, 19.332200, 56, 10, 0.00, 5, 5, 'Excelente manejo y cortesía.', 1, 5, 5, 5, NULL, 3, NULL),
+  			(14, '2025-05-23', -99.181153, 19.420380, -99.162703, 19.346679, 235, 20, 0.00, 4, 4, 'Sin contratiempos, muy bien.', 1, 5, 6, 6, NULL, 4, NULL),
+  			(15, '2025-05-23', -99.133209, 19.432608, -99.181153, 19.420380, 245, 15, 0.00, 5, 5, 'Recomiendo este conductor.', 1, 5, 7, 7, NULL, 5, NULL),
+
+--5 viajes programados
+			(16, '2025-05-20', -99.1332, 19.4326, -99.1400, 19.4400, 215.50, 15, 0.00, 5, 5, 'Viaje rápido y seguro.', 1, 2, 1, 1, NULL, NULL, NULL),
+  		(17, '2025-05-19', -99.1500, 19.4300, -99.1600, 19.4500, 289.75, 20, 0.00, 4, 5, 'Conductor amable y puntual.', 0, 2, NULL, 2, NULL, NULL, NULL),
+  		(18, '2025-05-18', -99.1200, 19.4100, -99.1300, 19.4200, 260.00, 10, 0.00, 3, 4, 'Todo bien, sin contratiempos.', 1, 2, 3, 3, NULL, NULL, NULL),
+  		(19, '2025-05-17', -99.1000, 19.4000, -99.1100, 19.4100, 299.99, 15, 0.00, 5, 5, 'Excelente servicio nocturno.', 1, 2, 4, 4, NULL, NULL, NULL),
+  		(20, '2025-05-16', -99.1350, 19.4350, -99.1450, 19.4450, 200.00, 10, 0.00, 4, 4, 'Buen viaje, sin problemas.', 0, 2, NULL, 5, NULL, NULL, NULL),
+--4 viajes cancelados
+  		(21, '2025-05-15', -99.1550, 19.4450, -99.1650, 19.4550, 275.30, 20, 0.00, 5, 5, 'Maneja con las patas.', 1, 9, 6, 6, NULL, 1, NULL),
+  		(22, '2025-05-14', -99.1100, 19.4200, -99.1200, 19.4300, 248.00, 15, 0.00, 4, 3, 'No me encontro.', 0, 9, NULL, 7, NULL, 2, NULL),
+  		(23, '2025-05-13', -99.1050, 19.4050, -99.1150, 19.4150, 220.75, 10, 0.00, 3, 4, 'Encontramos la calle cerrada.', 1, 9, 8, 8, NULL, 3, NULL),
+  		(24, '2025-05-12', -99.0900, 19.4000, -99.1000, 19.4100, 295.90, 15, 0.00, 5, 5, 'Olia a cigarro el conductor.', 0, 9, NULL, 1, NULL, 4, NULL),
+--3 viajes con adeudos
+  		(25, '2025-05-11', -99.1300, 19.4250, -99.1400, 19.4350, 230.00, 10, 230.00, 4, 4, 'Buena música durante viaje.', 1, 8, 2, 2, NULL, 5, NULL),
+  		(26, '2025-05-10', -99.1600, 19.4500, -99.1700, 19.4600, 280.60, 20, 100.00, 5, 5, 'Servicio rápido y eficiente.', 0, 8, NULL, 3, NULL, 1, NULL),
+  		(27, '2025-05-09', -99.1450, 19.4400, -99.1550, 19.4500, 210.40, 15, 210.40, 3, 3, 'Conductor llegó puntual.', 1, 8, 4, 4, NULL, 2, NULL),
+--6 viajes solicitados
+			(28, '2025-05-08', -99.1350, 19.4370, -99.1450, 19.4470, 299.00, 15, 0.00, 5, 5, 'Conductor educado y puntual.', 1, 1, 5, 5, NULL, NULL, NULL),
+  		(29, '2025-05-07', -99.1000, 19.4000, -99.1100, 19.4100, 250.50, 10, 0.00, 4, 4, 'El viaje fue sin demoras.', 0, 1, NULL, 6, NULL, NULL, NULL),
+  		(30, '2025-05-06', -99.1550, 19.4450, -99.1650, 19.4550, 285.25, 20, 0.00, 5, 5, 'Excelente atención al cliente.', 1, 1, 7, 7, NULL, NULL, NULL),
+  		(31, '2025-05-05', -99.1250, 19.4200, -99.1350, 19.4300, 270.00, 15, 0.00, 4, 4, 'Viaje cómodo y tranquilo.', 0, 1, NULL, 8, NULL, NULL, NULL),
+  		(32, '2025-05-04', -99.0900, 19.3950, -99.1000, 19.4050, 225.00, 10, 0.00, 3, 3, 'Sin inconvenientes en ruta.', 1, 1, 1, 1, NULL, NULL, NULL),
+  		(33, '2025-05-03', -99.1150, 19.4100, -99.1250, 19.4200, 240.80, 15, 0.00, 5, 4, 'Buen trato del conductor.', 0, 1, NULL, 1, NULL, NULL, NULL);
+GO
+
+
+ --##################################################
+-- ###				VIAJE_ESTATUS				#####
 -- ##################################################
 
-	insert into CATALOGOS.MODELO (ID_MODELO, NOMBRE_MODELO, ID_MARCA)
-	values  (1, 'Corolla', 1),
-			(2, 'Camry', 1),
-			(3, 'RAV4', 1),
-			(4, 'Mustang', 2),
-			(5, 'F-150', 2),
-			(6, 'Explorer', 2),
-			(7, 'X5', 3),
-			(8, 'Serie 3', 3),
-			(9, 'i4', 3);
-	
--- ##################################################
--- ###					QUEJA					#####
+INSERT INTO REGISTROS.VIAJE_ESTATUS(ID_VIAJE, ID_ESTATUS, FECHA_HORA)
+VALUES 
+	-- VIAJE COMPLETADO 1 
+	(1, 1, '2025-05-01 08:00:00'),
+	(1, 3, '2025-05-01 08:05:00'),
+	(1, 4, '2025-05-01 08:10:00'),
+	(1, 6, '2025-05-01 08:20:00'),
+	(1, 7, '2025-05-01 08:25:00'),
+	(1, 5, '2025-05-01 08:30:00'),
+
+	-- VIAJE COMPLETADO 2
+	(2, 1, '2025-05-02 09:00:00'),
+	(2, 3, '2025-05-02 09:05:00'),
+	(2, 4, '2025-05-02 09:10:00'),
+	(2, 6, '2025-05-02 09:20:00'),
+	(2, 7, '2025-05-02 09:25:00'),
+	(2, 5, '2025-05-02 09:30:00'),
+
+	-- VIAJE COMPLETADO 3
+	(3, 1, '2025-05-03 10:00:00'),
+	(3, 3, '2025-05-03 10:05:00'),
+	(3, 4, '2025-05-03 10:10:00'),
+	(3, 6, '2025-05-03 10:20:00'),
+	(3, 7, '2025-05-03 10:25:00'),
+	(3, 5, '2025-05-03 10:30:00'),
+
+	-- VIAJE COMPLETADO 4
+	(4, 1, '2025-05-04 11:00:00'),
+	(4, 3, '2025-05-04 11:05:00'),
+	(4, 4, '2025-05-04 11:10:00'),
+	(4, 6, '2025-05-04 11:20:00'),
+	(4, 7, '2025-05-04 11:25:00'),
+	(4, 5, '2025-05-04 11:30:00'),
+
+	-- VIAJE COMPLETADO 5
+	(5, 1, '2025-05-05 12:00:00'),
+	(5, 3, '2025-05-05 12:05:00'),
+	(5, 4, '2025-05-05 12:10:00'),
+	(5, 6, '2025-05-05 12:20:00'),
+	(5, 7, '2025-05-05 12:25:00'),
+	(5, 5, '2025-05-05 12:30:00'),
+
+	-- VIAJE COMPLETADO 6
+	(6, 1, '2025-05-06 08:00:00'),
+	(6, 3, '2025-05-06 08:05:00'),
+	(6, 4, '2025-05-06 08:10:00'),
+	(6, 6, '2025-05-06 08:20:00'),
+	(6, 7, '2025-05-06 08:25:00'),
+	(6, 5, '2025-05-06 08:30:00'),
+
+	-- VIAJE COMPLETADO 7
+	(7, 1, '2025-05-07 09:00:00'),
+	(7, 3, '2025-05-07 09:05:00'),
+	(7, 4, '2025-05-07 09:10:00'),
+	(7, 6, '2025-05-07 09:20:00'),
+	(7, 7, '2025-05-07 09:25:00'),
+	(7, 5, '2025-05-07 09:30:00'),
+
+	-- VIAJE COMPLETADO 8
+	(8, 1, '2025-05-08 10:00:00'),
+	(8, 3, '2025-05-08 10:05:00'),
+	(8, 4, '2025-05-08 10:10:00'),
+	(8, 6, '2025-05-08 10:20:00'),
+	(8, 7, '2025-05-08 10:25:00'),
+	(8, 5, '2025-05-08 10:30:00'),
+
+	-- VIAJE COMPLETADO 9
+	(9, 1, '2025-05-09 11:00:00'),
+	(9, 3, '2025-05-09 11:05:00'),
+	(9, 4, '2025-05-09 11:10:00'),
+	(9, 6, '2025-05-09 11:20:00'),
+	(9, 7, '2025-05-09 11:25:00'),
+	(9, 5, '2025-05-09 11:30:00'),
+
+	-- VIAJE COMPLETADO 10
+	(10, 1, '2025-05-10 12:00:00'),
+	(10, 3, '2025-05-10 12:05:00'),
+	(10, 4, '2025-05-10 12:10:00'),
+	(10, 6, '2025-05-10 12:20:00'),
+	(10, 7, '2025-05-10 12:25:00'),
+	(10, 5, '2025-05-10 12:30:00'),
+
+	-- VIAJE COMPLETADO 11
+	(11, 1, '2025-05-11 08:00:00'),
+	(11, 3, '2025-05-11 08:05:00'),
+	(11, 4, '2025-05-11 08:10:00'),
+	(11, 6, '2025-05-11 08:20:00'),
+	(11, 7, '2025-05-11 08:25:00'),
+	(11, 5, '2025-05-11 08:30:00'),
+
+	-- VIAJE COMPLETADO 12
+	(12, 1, '2025-05-12 09:00:00'),
+	(12, 3, '2025-05-12 09:05:00'),
+	(12, 4, '2025-05-12 09:10:00'),
+	(12, 6, '2025-05-12 09:20:00'),
+	(12, 7, '2025-05-12 09:25:00'),
+	(12, 5, '2025-05-12 09:30:00'),
+
+	-- VIAJE COMPLETADO 13
+	(13, 1, '2025-05-13 10:00:00'),
+	(13, 3, '2025-05-13 10:05:00'),
+	(13, 4, '2025-05-13 10:10:00'),
+	(13, 6, '2025-05-13 10:20:00'),
+	(13, 7, '2025-05-13 10:25:00'),
+	(13, 5, '2025-05-13 10:30:00'),
+
+	-- VIAJE COMPLETADO 14
+	(14, 1, '2025-05-14 11:00:00'),
+	(14, 3, '2025-05-14 11:05:00'),
+	(14, 4, '2025-05-14 11:10:00'),
+	(14, 6, '2025-05-14 11:20:00'),
+	(14, 7, '2025-05-14 11:25:00'),
+	(14, 5, '2025-05-14 11:30:00'),
+
+	-- VIAJE COMPLETADO 15
+	(15, 1, '2025-05-15 12:00:00'),
+	(15, 3, '2025-05-15 12:05:00'),
+	(15, 4, '2025-05-15 12:10:00'),
+	(15, 6, '2025-05-15 12:20:00'),
+	(15, 7, '2025-05-15 12:25:00'),
+	(15, 5, '2025-05-15 12:30:00');
+
+	--5 viajes programados
+	(16, 2, '2025-05-01 08:05:00'),
+	(17, 2, '2025-05-02 09:15:00'),
+	(18, 2, '2025-05-03 11:25:00'),
+	(19, 2, '2025-05-04 10:15:00'),
+	(20, 2, '2025-05-05 12:20:00'),
+
+	--4 viajes cancelados
+	(21, 1, '2025-05-01 08:05:00'),
+	(21, 9, '2025-05-01 08:15:00'),
+	(22, 1, '2025-05-02 12:55:00'),
+	(22, 9, '2025-05-02 12:57:00'),
+	(23, 1, '2025-05-03 10:32:00'),
+	(23, 9, '2025-05-03 10:37:00'),
+	(24, 1, '2025-05-02 07:10:00'),
+	(24, 9, '2025-05-02 07:14:00'),
+
+	--3 viajes con adeudos
+	-- VIAJE ADEUDO 1 
+	(25, 1, '2025-05-03 08:00:00'),
+	(25, 3, '2025-05-03 08:05:00'),
+	(25, 4, '2025-05-03 08:10:00'),
+	(25, 6, '2025-05-03 08:20:00'),
+	(25, 8, '2025-05-03 08:30:00'),
+	(25, 5, '2025-05-03 08:35:00'),
+
+	-- VIAJE ADEUDO 2
+	(26, 1, '2025-05-06 09:00:00'),
+	(26, 3, '2025-05-06 09:05:00'),
+	(26, 4, '2025-05-06 09:10:00'),
+	(26, 6, '2025-05-06 09:20:00'),
+	(26, 8, '2025-05-06 09:30:00'),
+	(26, 5, '2025-05-06 09:35:00'),
+
+	-- VIAJE ADEUDO 3
+	(27, 1, '2025-05-08 10:00:00'),
+	(27, 3, '2025-05-08 10:05:00'),
+	(27, 4, '2025-05-08 10:10:00'),
+	(27, 6, '2025-05-08 10:20:00'),
+	(27, 8, '2025-05-08 10:25:00'),
+	(27, 5, '2025-05-08 10:30:00'),
+
+	--6 viajes solicitados
+	-- VIAJE SOLICITADO 1
+	(28, 1, '2025-05-15 12:00:00'),
+
+	-- VIAJE SOLICITADO 2
+	(29, 1, '2025-05-15 12:05:00'),
+
+	-- VIAJE SOLICITADO 3
+	(30, 1, '2025-05-15 12:10:00'),
+
+	-- VIAJE SOLICITADO 4
+	(31, 1, '2025-05-15 12:20:00'),
+
+	-- VIAJE SOLICITADO 5
+	(32, 1, '2025-05-15 12:25:00'),
+
+	-- VIAJE SOLICITADO 6
+	(33, 1, '2025-05-15 12:30:00');
+GO
+
+ --##################################################
+-- ###				ACCIDENTE					#####
 -- ##################################################
 
 
@@ -281,135 +627,15 @@ VALUES
 -- ##################################################
 
 
--- ##################################################
--- ##				TARJETA						#####
--- ##################################################
-
 
 -- ##################################################
--- ##					TELEFONO				#####
+-- ###					QUEJA					#####
 -- ##################################################
 
 
--- ##################################################
--- ##					USUARIO					#####
--- ##################################################
-insert into usuarios.usuario (ID_USUARIO, ID_RECOMENDANTE,ES_ADMINISTRADOR,ES_CONDUCTOR, ES_CLIENTE,CONTRASEÑA,NOMBRE_USUARIO,CORREO,NOMBRE,APELLIDO1,APELLIDO2)
-	values  (1, NULL, 1, 0, 0, 'lorem4', 'CCGREEN', 'green@example.com', 'Alan', 'Turing', NULL),
-			(2, NULL, 1, 0, 0, 'ipsum*', 'GGMur', 'germ@example.com', 'Jonh', 'Doe', 'Second'),
-			(3, NULL, 1, 0, 0, '3sterno', 'ERB', 'justice@example.com', 'Ada', 'Lovelance', NULL),
-			(4, NULL, 0, 1, 0, '123Admin1*', 'admin_user', 'admin@example.com', 'Carlos', 'Pérez', NULL),
-			(5, 4, 0, 1, 0, 'Driver456#', 'driver_luis', 'luis@transporte.com', 'Luis', 'Martínez', 'Gómez'),
-			(6, NULL, 0, 1, 0, 'Client789&', 'cliente_ana', 'ana@email.com', 'Ana', 'López', NULL),
-			(7, 5, 0, 1, 0, 'Mix123&', 'usuario_mixto', 'mix@ejemplo.com', 'Jorge', 'Ramírez', 'Díaz'),
-			(8, NULL, 0, 1, 0, 'Cont23*', 'client_maria', 'maria@clientes.com', 'María', 'Santos', 'Delgado');
 
 -- ##################################################
--- ###				CONDUCTOR					#####
--- ##################################################
-insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
-	select '4','1234ABCD','2025-05-25','descripción ingeniosa 4', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor4.png', Single_Blob) As ProductosFoto
-	go
-	insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
-	select '5','6852AZCY','2025-05-25','descripción mas ingeniosa', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor5.png', Single_Blob) As ProductosFoto
-	go
-insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
-	select '6','4678JHSJ','2025-05-25','descripción  menos ingeniosa ', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor6.png', Single_Blob) As ProductosFoto
-go
-insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
-	select '7','1569KLAS','2025-05-25','descripción algo ingeniosa', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor7.png', Single_Blob) As ProductosFoto
-go
-insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
-	select '8','4568USAD','2025-05-25','descripción', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor8.png', Single_Blob) As ProductosFoto
-go
-
--- ##################################################
--- ###					PAGO					#####
--- ##################################################
-	insert into OPERACIONES.PAGO(ID_USUARIO,FOLIO,MONTO,FECHA)
-			--pagos para ID 4
-	values  (4, 1, 3200, '2025-04-28'),
-			(4, 2, 4800, '2025-05-05'),
-			(4, 3, 3500, '2025-05-12'),
-
-			-- Pagos para ID 5
-			(5, 1, 3100, '2025-04-28'),
-			(5, 2, 4950, '2025-05-05'),
-			(5, 3, 3700, '2025-05-12'),
-
-			-- Pagos para ID 6
-			(6, 1, 4600, '2025-04-28'),
-			(6, 2, 3300, '2025-05-05'),
-			(6, 3, 4100, '2025-05-12'),
-
-			-- Pagos para ID 7
-			(7, 1, 3000, '2025-04-28'),
-			(7, 2, 4500, '2025-05-05'),
-			(7, 3, 3850, '2025-05-12'),
-
-			-- Pagos para ID 8
-			(8, 1, 5000, '2025-04-28'),
-			(8, 2, 3900, '2025-05-05'),
-			(8, 3, 3400, '2025-05-12');
-
--- ##################################################
--- ##					 VIAJE					#####
+-- ###				FACTURA						#####
 -- ##################################################
 
-INSERT INTO OPERACIONES.VIAJE(ID_VIAJE, FECHA_INICIOVIAJE,)
-VALUES (1,),
-	(2,),
-	(3,),
-	(4,),
-	(5,),
-	(6,),
-	(7,),
-	(8,),
-	(9,),
-	(10,),
-	(11,),
-	(12,),
-	(13,),
-	(14,),
-	(15,);
-GO
 
--- ##################################################
--- ##					 DESCUENTO				#####
--- ##################################################
-
-BEGIN TRANSACTION
-INSERT INTO OPERACIONES.DESCUENTO(ID_DESCUENTO, FECHA_INICIO, FECHA_FIN, MONTO, ORIGEN)
-VALUES (1, '2025-05-20', '2025-06-20', 50, 'ANIVERSARIO'),
-	(2, '2025-05-25', '2025-06-20', 50, 'OFERTA FLASH'),
-	(3, '2025-05-20', '2025-05-25', 50, 'RECOMENDACION'),
-COMMIT TRANSACTION
-
--- ##################################################
--- ##					 ESTATUS				#####
--- ##################################################
-
-BEGIN TRANSACTION
-INSERT INTO CATALOGO.ESTATUS(ID_ESTATUS, NOMBRE_ESTATUS)
-VALUES (1, 'SOLICITADO'),
-	(2,'PROGRAMADO'),
-	(3,'CONFIRMADO'),
-	(4,'EN CURSO'),
-	(5,'TERMINADO'),
-	(6,'POR COBRAR'),
-	(7,'PAGADO'),
-	(8,'CON ADEUDO'),
-	(9,'CANCELADO')
-COMMIT TRANSACTION
-
---###################################################
--- ###				CATALOGO_QUEJAS 			#####
--- ##################################################
-
-BEGIN TRANSACTION
-INSERT INTO CATALOGO.CATALOGO_QUEJAS(ID_CATALOGO_QUEJAS, MOTIVO)
-VALUES (1, 'GROSERO'),
-	(2, 'LENTO'),
-	(3, 'SUCIO'),
-	(4, 'FUMADOR')
-COMMIT TRANSACTION
