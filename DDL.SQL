@@ -489,7 +489,7 @@ go
 
 CREATE TABLE VIAJE(
     ID_VIAJE                       bigint          NOT NULL,
-    FECHA_INICIOVIAJE              datetime        NOT NULL,
+    FECHA_INICIOVIAJE              datetime        NULL,
     ORIGEN_LONGITUD                float           NOT NULL,
     ORIGEN_LATITUD                 float           NOT NULL,
     DESTINO_LONGITUD               float           NOT NULL,
