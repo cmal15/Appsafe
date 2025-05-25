@@ -22,7 +22,7 @@ BEGIN TRANSACTION
 INSERT INTO OPERACIONES.DESCUENTO(ID_DESCUENTO, FECHA_INICIO, FECHA_FIN, MONTO, ORIGEN)
 VALUES (1, '2025-05-20', '2025-06-20', 50, 'ANIVERSARIO'),
 	(2, '2025-05-25', '2025-06-20', 50, 'OFERTA FLASH'),
-	(3, '2025-05-20', '2025-05-25', 50, 'RECOMENDACION'),
+	(3, '2025-05-20', '2025-05-25', 50, 'RECOMENDACION')
 COMMIT TRANSACTION
 
 -- ##################################################
@@ -30,7 +30,7 @@ COMMIT TRANSACTION
 -- ##################################################
 
 BEGIN TRANSACTION
-INSERT INTO CATALOGO.ESTATUS(ID_ESTATUS, NOMBRE_ESTATUS)
+INSERT INTO CATALOGOS.ESTATUS(ID_ESTATUS, NOMBRE_ESTATUS)
 VALUES (1, 'SOLICITADO'),
 	(2,'PROGRAMADO'),
 	(3,'CONFIRMADO'),
@@ -47,7 +47,7 @@ COMMIT TRANSACTION
 -- ##################################################
 
 BEGIN TRANSACTION
-INSERT INTO CATALOGO.CATALOGO_QUEJAS(ID_CATALOGO_QUEJAS, MOTIVO)
+INSERT INTO CATALOGOS.CATALOGO_QUEJAS(ID_CATALOGO_QUEJAS, MOTIVO)
 VALUES (1, 'GROSERO'),
 	(2, 'LENTO'),
 	(3, 'SUCIO'),
@@ -58,9 +58,9 @@ COMMIT TRANSACTION
 -- ##					USUARIO					#####
 -- ##################################################
 insert into usuarios.usuario (ID_USUARIO, ID_RECOMENDANTE,ES_ADMINISTRADOR,ES_CONDUCTOR, ES_CLIENTE,CONTRASEÑA,NOMBRE_USUARIO,CORREO,NOMBRE,APELLIDO1,APELLIDO2)
-	values  (1, NULL, 1, 0, 0, 'lorem4', 'CCGREEN', 'green@example.com', 'Alan', 'Turing', NULL),
-			(2, NULL, 1, 0, 0, 'ipsum*', 'GGMur', 'germ@example.com', 'Jonh', 'Doe', 'Second'),
-			(3, NULL, 1, 0, 0, '3sterno', 'ERB', 'justice@example.com', 'Ada', 'Lovelance', NULL),
+	values  (1, NULL, 1, 0, 0, 'Lorem4*', 'CCGREEN', 'green@example.com', 'Alan', 'Turing', NULL),
+			(2, NULL, 1, 0, 0, 'Ipsum10*', 'GGMur', 'germ@example.com', 'Jonh', 'Doe', 'Second'),
+			(3, NULL, 1, 0, 0, '3Ste*rno', 'ERB', 'justice@example.com', 'Ada', 'Lovelance', NULL),
 			(4, NULL, 0, 1, 0, '123Admin1*', 'admin_user', 'admin@example.com', 'Carlos', 'Pérez', NULL),
 			(5, 4, 0, 1, 0, 'Driver456#', 'driver_luis', 'luis@transporte.com', 'Luis', 'Martínez', 'Gómez'),
 			(6, NULL, 0, 1, 0, 'Client789&', 'cliente_ana', 'ana@email.com', 'Ana', 'López', NULL),
@@ -109,19 +109,20 @@ VALUES (1, '5555555555'),
 COMMIT TRANSACTION
 
 -- ##################################################
--- ##				TARJETA						#####
+-- ###				 BANCO						#####
 -- ##################################################
 
-INSERT INTO TARJETA (ID_TARJETA, VIGENCIA, NUMERO, ID_BANCO, ID_USUARIO)
+INSERT INTO CATALOGOS.BANCO (ID_BANCO, NOMBRE)
 VALUES
-  (1, '2026-05-31', '4539578763451234', 1, 1),
-  (2, '2026-12-31', '5520137890123456', 2, 2),
-  (3, '2027-07-15', '6011000990139424', 3, 3),
-  (4, '2025-11-30', '3566002020360505', 4, 4),
-  (5, '2028-03-31', '5105105105105100', 5, 5),
-  (6, '2029-09-30', '4111111111111111', 6, 6),
-  (7, '2026-06-30', '6011111111111117', 7, 7),
-  (8, '2027-10-31', '3782822463100050', 8, 8);
+  (1,  'BBVA'),
+  (2,  'Banorte'),
+  (3,  'Citibanamex'),
+  (4,  'Santander'),
+  (5,  'HSBC'),
+  (6,  'Scotiabank'),
+  (7,  'Banco Azteca'),
+  (8,  'Inbursa'),
+  (9,  'NU');
 
 
 
@@ -130,7 +131,7 @@ VALUES
 -- ##################################################
 
 BEGIN TRANSACTION
-INSERT INTO CATALOGOS.CATALOGO_ACCIDENTE(ID_TIPO_ACCIDENTE, TIPO)
+INSERT INTO CATALOGOS.CATALOGO_ACCIDENTES(ID_TIPO_ACCIDENTE, TIPO)
 VALUES (1, 'Colisión frontal'),
 	(2, 'Colisión lateral'),
 	(3, 'Colisión trasera')
@@ -164,6 +165,7 @@ COMMIT TRANSACTION
 -- ##################################################
 -- ###  				AUTO					#####
 -- ##################################################
+
 	insert into USUARIOS.automovil (ID_AUTOMOVIL,NUMPLACAS,AÑO,ID_USUARIO,ID_MODELO)
 	values  (1, 'ABC1234', 2018, 4, 1),
 			(2, 'XYZ5678', 2020, 5, 4),
@@ -174,6 +176,7 @@ COMMIT TRANSACTION
 -- ##################################################
 -- ###					PAGO					#####
 -- ##################################################
+
 	insert into OPERACIONES.PAGO(ID_USUARIO,FOLIO,MONTO,FECHA)
 			--pagos para ID 4
 	values  (4, 1, 3200, '2025-04-28'),
@@ -203,7 +206,7 @@ COMMIT TRANSACTION
 -- ##################################################
 -- ###  				ESTADO					#####
 -- ##################################################
-INSERT INTO USUARIOS.ESTADO (NOMBRE_ESTADO)
+INSERT INTO CATALOGOS.ESTADO (NOMBRE_ESTADO)
 VALUES ('CDMX'), 
 		('Aguascalientes'),
 		('Baja California'),
@@ -236,12 +239,13 @@ VALUES ('CDMX'),
 		('Veracruz de Ignacio de la Llave'),
 		('Yucatán'),
 		('Zacatecas');
+
 -- ##################################################
 -- ###  				ALCALDIA				#####
 -- ##################################################
 
 --Por el momento agregaremos de la CDMX
-INSERT INTO USUARIOS.ALCALDIA (NOMBRE_ALCALDIA, ID_ESTADO) 
+INSERT INTO CATALOGOS.ALCALDIA (NOMBRE_ALCALDIA, ID_ESTADO) 
 VALUES	('Álvaro Obregón', 1), --1
 		('Azcapotzalco', 1), --2
 		('Benito Juárez', 1), --3
@@ -265,7 +269,7 @@ VALUES	('Álvaro Obregón', 1), --1
 -- ##################################################
 
 --Por el momento agregaremos de la CDMX
-INSERT INTO USUARIOS.COLONIA (NOMBRE_COLONIA, ID_ALCALDIA)
+INSERT INTO CATALOGOS.COLONIA (NOMBRE_COLONIA, ID_ALCALDIA)
 VALUES ('Acueducto', 1),
 	   ('Ave Real', 1),
 	   ('Carola', 1),
@@ -344,27 +348,12 @@ VALUES (1, 'GARC850101HDF', '5512345678',  '2025-01-10', 1),
   (7, 'RUIZ871112PAS', '5578901234',  '2025-02-28', 7),
   (8, 'SANC940825LMN', '5589012345',  '2025-05-05', 8);
 
--- ##################################################
--- ###				 BANCO						#####
--- ##################################################
-
-INSERT INTO USUARIOS.BANCO (ID_BANCO, NOMBRE)
-VALUES
-  (1,  'BBVA'),
-  (2,  'Banorte'),
-  (3,  'Citibanamex'),
-  (4,  'Santander'),
-  (5,  'HSBC'),
-  (6,  'Scotiabank'),
-  (7,  'Banco Azteca'),
-  (8,  'Inbursa'),
-  (9,  'NU'),
 
 -- ##################################################
 -- ###				TARJETA						#####
 -- ##################################################
 
-INSERT INTO TARJETA (ID_TARJETA, VIGENCIA, NUMERO, ID_BANCO, ID_USUARIO)
+INSERT INTO USUARIOS.TARJETA(ID_TARJETA, VIGENCIA, NUMERO, ID_BANCO, ID_USUARIO)
 VALUES
   (1, '2026-05-31', '4539578763451234', 1, 1),
   (2, '2026-12-31', '5520137890123456', 2, 2),
@@ -380,18 +369,18 @@ VALUES
 -- ##					 VIAJE					#####
 -- ##################################################
 
-INSERT INTO OPERACIONES.VIAJE((1) ID_VIAJE, (2) FECHA_INICIOVIAJE, (3) ORIGEN_LONGITUD, (4) ORIGEN_LATITUD,
-							(5) DESTINO_LONGITUD, (6) DESTINO_LATITUD, (7) IMPORTE, (8) PROPINA, (9) ADEUDO,
-                            (10) CALIFICACION_CONDUCTOR, (11) CALIFICACION_CLIENTE, (12) COMENTARIO, 
-                            (13) PAGO_CON_TARJETA, (14) ID_ESTATUS, (15) ID_TARJETA, (16) ID_USUARIO, (17) ID_FACTURA,
-                            (18) ID_AUTOMOVIL, (19) ID_DESCUENTO)
+INSERT INTO OPERACIONES.VIAJE( ID_VIAJE, FECHA_INICIOVIAJE, ORIGEN_LONGITUD, ORIGEN_LATITUD,
+							 DESTINO_LONGITUD, DESTINO_LATITUD, IMPORTE, PROPINA, ADEUDO,
+                            CALIFICACION_CONDUCTOR, CALIFICACION_CLIENTE, COMENTARIO, 
+                            PAGO_CON_TARJETA, ID_ESTATUS, ID_TARJETA, ID_USUARIO, ID_FACTURA,
+                            ID_AUTOMOVIL, ID_DESCUENTO)
 
 --15 viajes completos
 VALUES 	(1, '2025-05-23', -99.120200, 19.508300, -99.133209, 19.432608, 331, 10, 0.00, 2, 2, 'Viaje caro y tardado.', 1, 5, 1, 1, NULL, 1, NULL),
   			(2, '2025-06-23', -99.200500, 19.489100, -99.120200, 19.508300, 320, 15, 0.00, 1, 2, 'Mala actitud del conductor.', 1, 5, 2, 2, NULL, 2, NULL),
   			(3, '2025-07-23', -99.174600, 19.493900, -99.200500, 19.489100, 123, 20, 0.00, 2, 3, 'El auto estaba sucio.', 1, 5, 3, 3, NULL, 3, NULL),
   			(4, '2025-05-23', -99.175300, 19.378600, -99.174600, 19.493900, 112, 10, 0.00, 2, 2, 'No conocía la ruta.', 1, 5, 4, 4, NULL, 4, NULL),
-  			(5, '2025-06-23', -99.139600, 19.455900, -99.175300, 19.378600, 358, 15, 0.00, 1, 2, 'Tardó demasiado en llegar.', 1, 5, 5, NULL, NULL, 5, NULL),
+  			(5, '2025-06-23', -99.139600, 19.455900, -99.175300, 19.378600, 358, 15, 0.00, 1, 2, 'Tardó demasiado en llegar.', 1, 5, 5, 5, NULL, 5, NULL),
   			(6, '2025-07-23', -99.161700, 19.288300, -99.139600, 19.455900, 98.23, 20, 0.00, 2, 1,'Conductor muy distraído.', 1, 5, 6, 6, NULL, 1, NULL),
   			(7, '2025-05-23', -99.071900, 19.436100, -99.161700, 19.288300, 332, 15, 0.00, 3, 2, 'Viaje incómodo y ruidoso.', 1, 5, 7, 7, NULL, 2, NULL),
 
@@ -428,6 +417,7 @@ VALUES 	(1, '2025-05-23', -99.120200, 19.508300, -99.133209, 19.432608, 331, 10,
   		(33, '2025-05-03', -99.1150, 19.4100, -99.1250, 19.4200, 240.80, 15, 0.00, 5, 4, 'Buen trato del conductor.', 0, 1, NULL, 1, NULL, NULL, NULL);
 GO
 
+select * from OPERACIONES.VIAJE
 
  --##################################################
 -- ###				VIAJE_ESTATUS				#####
@@ -553,7 +543,7 @@ VALUES
 	(15, 4, '2025-05-15 12:10:00'),
 	(15, 6, '2025-05-15 12:20:00'),
 	(15, 7, '2025-05-15 12:25:00'),
-	(15, 5, '2025-05-15 12:30:00');
+	(15, 5, '2025-05-15 12:30:00'),
 
 	--5 viajes programados
 	(16, 2, '2025-05-01 08:05:00'),
@@ -625,9 +615,8 @@ GO
 -- ##################################################
 -- ##			REGISTRO_UBICACION				#####
 -- ##################################################
-
 -- VIAJE 1 - 2025-05-23
-INSERT INTO REGISTRO_UBICACION VALUES 
+INSERT INTO REGISTROS.REGISTRO_UBICACION VALUES 
 (1, -99.120200, 19.508300, '2025-05-23 08:00:00', 1),
 (2, -99.122000, 19.505000, '2025-05-23 08:01:00', 1),
 (3, -99.125000, 19.495000, '2025-05-23 08:02:00', 1),
@@ -635,7 +624,7 @@ INSERT INTO REGISTRO_UBICACION VALUES
 (5, -99.133209, 19.432608, '2025-05-23 08:04:00', 1);
 
 -- VIAJE 2 - 2025-06-23
-INSERT INTO REGISTRO_UBICACION VALUES 
+INSERT INTO REGISTROS.REGISTRO_UBICACION VALUES 
 (6, -99.200500, 19.489100, '2025-06-23 08:10:00', 2),
 (7, -99.192000, 19.492000, '2025-06-23 08:11:00', 2),
 (8, -99.180000, 19.496000, '2025-06-23 08:12:00', 2),
@@ -643,7 +632,7 @@ INSERT INTO REGISTRO_UBICACION VALUES
 (10, -99.120200, 19.508300, '2025-06-23 08:14:00', 2);
 
 -- VIAJE 3 - 2025-07-23
-INSERT INTO REGISTRO_UBICACION VALUES 
+INSERT INTO REGISTROS.REGISTRO_UBICACION VALUES 
 (11, -99.174600, 19.493900, '2025-07-23 08:20:00', 3),
 (12, -99.180000, 19.492000, '2025-07-23 08:21:00', 3),
 (13, -99.185000, 19.490000, '2025-07-23 08:22:00', 3),
@@ -651,7 +640,7 @@ INSERT INTO REGISTRO_UBICACION VALUES
 (15, -99.200500, 19.489100, '2025-07-23 08:24:00', 3);
 
 -- VIAJE 4 - 2025-05-23
-INSERT INTO REGISTRO_UBICACION VALUES 
+INSERT INTO REGISTROS.REGISTRO_UBICACION VALUES 
 (16, -99.175300, 19.378600, '2025-05-23 08:30:00', 4),
 (17, -99.170000, 19.400000, '2025-05-23 08:31:00', 4),
 (18, -99.168000, 19.420000, '2025-05-23 08:32:00', 4),
@@ -659,7 +648,7 @@ INSERT INTO REGISTRO_UBICACION VALUES
 (20, -99.174600, 19.493900, '2025-05-23 08:34:00', 4);
 
 -- VIAJE 5 - 2025-06-23
-INSERT INTO REGISTRO_UBICACION VALUES 
+INSERT INTO REGISTROS.REGISTRO_UBICACION VALUES 
 (21, -99.139600, 19.455900, '2025-06-23 08:40:00', 5),
 (22, -99.145000, 19.440000, '2025-06-23 08:41:00', 5),
 (23, -99.150000, 19.420000, '2025-06-23 08:42:00', 5),
@@ -667,7 +656,7 @@ INSERT INTO REGISTRO_UBICACION VALUES
 (25, -99.175300, 19.378600, '2025-06-23 08:44:00', 5);
 
 -- VIAJE 6 - 2025-07-23
-INSERT INTO REGISTRO_UBICACION VALUES 
+INSERT INTO REGISTROS.REGISTRO_UBICACION VALUES 
 (26, -99.161700, 19.288300, '2025-07-23 08:50:00', 6),
 (27, -99.150000, 19.320000, '2025-07-23 08:51:00', 6),
 (28, -99.145000, 19.350000, '2025-07-23 08:52:00', 6),
@@ -675,7 +664,7 @@ INSERT INTO REGISTRO_UBICACION VALUES
 (30, -99.139600, 19.455900, '2025-07-23 08:54:00', 6);
 
 -- VIAJE 7 - 2025-05-23
-INSERT INTO REGISTRO_UBICACION VALUES 
+INSERT INTO REGISTROS.REGISTRO_UBICACION VALUES 
 (31, -99.071900, 19.436100, '2025-05-23 09:00:00', 7),
 (32, -99.100000, 19.400000, '2025-05-23 09:01:00', 7),
 (33, -99.120000, 19.370000, '2025-05-23 09:02:00', 7),
@@ -683,7 +672,7 @@ INSERT INTO REGISTRO_UBICACION VALUES
 (35, -99.161700, 19.288300, '2025-05-23 09:04:00', 7);
 
 -- VIAJE 8 - 2025-06-23
-INSERT INTO REGISTRO_UBICACION VALUES 
+INSERT INTO REGISTROS.REGISTRO_UBICACION VALUES 
 (36, -99.200800, 19.433400, '2025-06-23 09:10:00', 8),
 (37, -99.175000, 19.434000, '2025-06-23 09:11:00', 8),
 (38, -99.150000, 19.435000, '2025-06-23 09:12:00', 8),
@@ -691,7 +680,7 @@ INSERT INTO REGISTRO_UBICACION VALUES
 (40, -99.071900, 19.436100, '2025-06-23 09:14:00', 8);
 
 -- VIAJE 9 - 2025-07-23
-INSERT INTO REGISTRO_UBICACION VALUES 
+INSERT INTO REGISTROS.REGISTRO_UBICACION VALUES 
 (41, -99.270000, 19.360000, '2025-07-23 09:20:00', 9),
 (42, -99.250000, 19.380000, '2025-07-23 09:21:00', 9),
 (43, -99.230000, 19.400000, '2025-07-23 09:22:00', 9),
@@ -699,7 +688,7 @@ INSERT INTO REGISTRO_UBICACION VALUES
 (45, -99.200800, 19.433400, '2025-07-23 09:24:00', 9);
 
 -- VIAJE 10 - 2025-05-23
-INSERT INTO REGISTRO_UBICACION VALUES 
+INSERT INTO REGISTROS.REGISTRO_UBICACION VALUES 
 (46, -99.152000, 19.416000, '2025-05-23 09:30:00', 10),
 (47, -99.180000, 19.410000, '2025-05-23 09:31:00', 10),
 (48, -99.210000, 19.400000, '2025-05-23 09:32:00', 10),
