@@ -279,10 +279,10 @@ BEGIN
     IF EXISTS (
         SELECT ID_VIAJE 
         FROM inserted
-        WHERE FECHA_INICIOVIAJE > DATEADD(HOUR, 2, GETDATE())
+        WHERE FECHA_INICIOVIAJE > DATEADD(DAY, 2, GETDATE())
     )
     BEGIN
-        RAISERROR('Operación no permitida: el inicio del viaje tiene más de dos horas.',16,1);
+        RAISERROR('Operación no permitida: el inicio del viaje tiene más de dos días.',16,1);
         ROLLBACK TRANSACTION;
     END
 END;
@@ -316,6 +316,38 @@ BEGIN
 		ROLLBACK TRANSACTION
 	END
 
+END
+GO
+
+
+CREATE OR ALTER TRIGGER OPERACIONES.TR_VIAJE_CAMBIO_ESTATUS
+   ON OPERACIONES.VIAJE
+   AFTER UPDATE
+AS
+BEGIN
+    IF UPDATE(ID_ESTATUS)
+    BEGIN
+        IF EXISTS (
+            SELECT 1
+              FROM deleted D
+              JOIN inserted I
+             ON I.ID_VIAJE = D.ID_VIAJE
+             WHERE I.ID_ESTATUS <> D.ID_ESTATUS
+               AND (
+                    (D.ID_ESTATUS = 1 AND I.ID_ESTATUS NOT IN (3, 9)) OR
+                    (D.ID_ESTATUS = 2 AND I.ID_ESTATUS NOT IN (3, 9)) OR
+                    (D.ID_ESTATUS = 3 AND I.ID_ESTATUS NOT IN (4, 9)) OR
+                    (D.ID_ESTATUS = 4 AND I.ID_ESTATUS NOT IN (6, 9)) OR
+                    (D.ID_ESTATUS = 5 AND I.ID_ESTATUS <> 5)      OR
+                    (D.ID_ESTATUS = 6 AND I.ID_ESTATUS NOT IN (7, 8)) OR
+                    (D.ID_ESTATUS IN (7,8,9) AND I.ID_ESTATUS NOT IN (5))
+                  )
+        )
+        BEGIN
+            RAISERROR('Transición de estatus de viaje incorrecta', 16, 1);
+            ROLLBACK TRANSACTION;
+        END
+    END
 END
 GO
 
