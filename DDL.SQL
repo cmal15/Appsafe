@@ -64,7 +64,7 @@ go
 
 CREATE TABLE AUTOMOVIL(
     ID_AUTOMOVIL       int         NOT NULL,
-    NUMPLACAS          char(8)     NOT NULL,
+    NUMPLACAS          char(8)     NOT NULL UNIQUE,
     AÑO                int         NOT NULL,
     ID_USUARIO         int         NOT NULL,
     ID_MODELO          int         NOT NULL,
