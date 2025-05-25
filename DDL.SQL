@@ -68,6 +68,7 @@ CREATE TABLE AUTOMOVIL(
     AÑO                int         NOT NULL,
     ID_USUARIO         int         NOT NULL,
     ID_MODELO          int         NOT NULL,
+	DISPONIBLE		   bit		   NOT NULL,
     CONSTRAINT PK_AUTOMOVIL PRIMARY KEY NONCLUSTERED (ID_AUTOMOVIL),
 );
 go

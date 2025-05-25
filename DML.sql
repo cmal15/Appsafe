@@ -75,7 +75,32 @@ GO
 
 -- TODO FOR DELETE: FACTURA, TARJETA, VIAJE
 -- TODO FOR UPDATE: VIAJE
+CREATE OR ALTER TRIGGER OPERACIONES.UPDATE_VIAJE
+ON OPERACIONES.VIAJE
+FOR UPDATE
+AS
+	BEGIN
+	IF UPDATE(ID_AUTOMOVIL)
+		BEGIN
+		IF EXISTS(SELECT ID_AUTOMOVIL 
+					FROM USUARIOS.AUTOMOVIL 
+					WHERE ID_AUTOMOVIL 
+					IN (SELECT ID_AUTOMOVIL FROM inserted) AND DISPONIBLE= 0 )
+		BEGIN
+		ROLLBACK TRAN
+		END
+		END
+	ELSE IF UPDATE(ID_ESTATUS)
+		BEGIN
+        UPDATE a
+        SET a.DISPONIBLE = 0
+        FROM inserted i
+        JOIN USUARIOS.AUTOMOVIL a ON i.ID_AUTOMOVIL = a.ID_AUTOMOVIL
+        WHERE i.ID_ESTATUS = 5;
+    END
 
+	END;
+GO
 -- ##################################################
 -- ## TRIGGERS CONDUCTOR
 -- ##################################################
@@ -153,7 +178,30 @@ GO
 -- ##################################################
 -- ## TRIGGERS REGISTRO_UBICACION
 -- ##################################################
+CREATE OR ALTER TRIGGER REGISTROS.TR_
+ON REGISTROS.REGISTRO_UBICACION
+FOR INSERT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	DECLARE @MAX_TIME datetime, @id_viaje  bigint, @INSERTED_TIME datetime, @estatus tinyint
+	
+	SELECT @MAX_TIME = max(Hora), @id_viaje= ID_VIAJE
+	FROM REGISTROS.REGISTRO_UBICACION
+	where id_viaje in (select id_viaje from inserted)								
+	group by ID_VIAJE
+	select @INSERTED_TIME= Hora from inserted
+	
+	select @estatus=ID_ESTATUS from OPERACIONES.VIAJE
+	where ID_VIAJE= @id_viaje
 
+	if @estatus<>4 and not( DATEDIFF(MINUTE, @INSERTED_TIME, @MAX_TIME) = 1 or not exists(SELECT ID_VIAJE
+	FROM REGISTROS.REGISTRO_UBICACION
+	where id_viaje in (select id_viaje from inserted)								
+	))
+		rollback tran	
+END;
+GO
 
 -- ##################################################
 -- ## TRIGGERS TARJETA
