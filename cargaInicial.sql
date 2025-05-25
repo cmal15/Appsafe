@@ -5,15 +5,12 @@
 				  Membrilla Isaias Iñaki Ramos
 				  Miramón Pérez Jocelyn
 
-3 descuentos (Carlos)
-3 admins {3 teléfonos} (Carlos)
-3 catalogo_accidentes (Carlos)
-6 estatus (Carlos)
-4 catalogo_quejas (Carlos)
  */
 
  -------************* INSERCIONES ******************-------
 
+ USE [APPSAFE]
+GO
 -- ##################################################
 -- ##					 DESCUENTO				#####
 -- ##################################################
@@ -66,12 +63,12 @@ insert into usuarios.usuario (ID_USUARIO, ID_RECOMENDANTE,ES_ADMINISTRADOR,ES_CO
 			(6, NULL, 0, 1, 0, 'Client789&', 'cliente_ana', 'ana@email.com', 'Ana', 'López', NULL),
 			(7, 5, 0, 1, 0, 'Mix123&', 'usuario_mixto', 'mix@ejemplo.com', 'Jorge', 'Ramírez', 'Díaz'),
 			(8, NULL, 0, 1, 0, 'Cont23*', 'client_maria', 'maria@clientes.com', 'María', 'Santos', 'Delgado');
-
+			
 -- ##################################################
 -- ###				CONDUCTOR					#####
 -- ##################################################
 insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
-	select '4','1234ABCD','2025-05-25','descripción ingeniosa 4', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor4.png', Single_Blob) As ProductosFoto
+	select '4','1234ABCD','2025-05-25','descripción ingeniosa 4', *from OpenRowset(Bulk 'C:\Users\cmal1\Documents\Universidad\Semestre6\Bases de datos\proyectofinal\Appsafe\imag\Processing.png', Single_Blob) As ProductosFoto
 	go
 insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
 	select '5','6852AZCY','2025-05-25','descripción mas ingeniosa', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor5.png', Single_Blob) As ProductosFoto
@@ -167,16 +164,16 @@ COMMIT TRANSACTION
 -- ##################################################
 
 	insert into USUARIOS.automovil (ID_AUTOMOVIL,NUMPLACAS,AÑO,ID_USUARIO,ID_MODELO)
-	values  (1, 'ABC1234', 2018, 4, 1),
+	values  (1, 'ABC1234', 2021, 4, 1),
 			(2, 'XYZ5678', 2020, 5, 4),
-			(3, 'LMN9012', 2017, 6, 7),
-			(4, 'QRS3456', 2019, 7, 2),
+			(3, 'LMN9012', 2022, 6, 7),
+			(4, 'QRS3456', 2020, 7, 2),
 			(5, 'TUV7890', 2021, 8, 8);
 
 -- ##################################################
 -- ###					PAGO					#####
 -- ##################################################
-
+select * from OPERACIONES.PAGO
 	insert into OPERACIONES.PAGO(ID_USUARIO,FOLIO,MONTO,FECHA)
 			--pagos para ID 4
 	values  (4, 1, 3200, '2025-04-28'),
@@ -368,10 +365,10 @@ VALUES
 -- ##################################################
 -- ##					 VIAJE					#####
 -- ##################################################
+DISABLE TRIGGER ALL ON OPERACIONES.VIAJE
 
 BEGIN TRANSACTION VIAJES_CARGA_INICIAL
 
-DISABLE TRIGGER ALL ON OPERACIONES.VIAJE
 
 INSERT INTO OPERACIONES.VIAJE( ID_VIAJE, FECHA_INICIOVIAJE, ORIGEN_LONGITUD, ORIGEN_LATITUD,
 							 DESTINO_LONGITUD, DESTINO_LATITUD, IMPORTE, PROPINA, ADEUDO,
@@ -421,9 +418,10 @@ VALUES 	(1, '2025-05-23', -99.120200, 19.508300, -99.133209, 19.432608, 331, 10,
   		(33, '2025-05-03', -99.1150, 19.4100, -99.1250, 19.4200, 240.80, 15, 0.00, 5, 4, 'Buen trato del conductor.', 0, 1, NULL, 1, NULL, NULL, NULL);
 GO
 
-ENABLE TRIGGER ALL ON OPERACIONES.VIAE
 
-COMMIT TRANSACTION
+COMMIT TRANSACTION;
+
+ENABLE TRIGGER ALL ON OPERACIONES.VIAJE
 
 select * from OPERACIONES.VIAJE
 

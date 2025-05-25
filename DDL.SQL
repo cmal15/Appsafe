@@ -345,10 +345,10 @@ go
 /* 
  * TABLE: PAGO 
  */
-
+ 
 CREATE TABLE PAGO(
     ID_USUARIO    int     NOT NULL,
-    FOLIO		  int     NOT NULL,
+    FOLIO		  char(8)     NOT NULL,
     MONTO         money     NOT NULL,
     FECHA         date    NOT NULL,
     CONSTRAINT PK_PAGO PRIMARY KEY NONCLUSTERED (ID_USUARIO, FOLIO)

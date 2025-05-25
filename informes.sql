@@ -7,7 +7,8 @@
  */
 
  USE [APPSAFE]
- 
+ GO
+
 /*
  * 1. Viajes diarios por conductor; datos del conductor, numero de viajes, monto total, este informe debe poder
  * obtener por un periodo de tiempo
@@ -48,7 +49,7 @@ BEGIN
     JOIN USUARIOS.CONDUCTOR AS C ON C.ID_USUARIO = VPC.ID_USUARIO
     JOIN USUARIOS.USUARIO AS U ON U.ID_USUARIO = C.ID_USUARIO;
 END;
-
+GO
 /*
  * 2. Consolidado mensual; día, monto total, monto mensual
 */
@@ -77,7 +78,7 @@ BEGIN
 	GROUP BY C.ID_USUARIO
 	ORDER BY COUNT(*) DESC
 END;
-
+GO
 /*
  * 4. Top 5 de clientes, es decir, los clientes con mayor número de viajes (nombre completo y correo)
 */
