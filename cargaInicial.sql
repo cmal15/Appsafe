@@ -68,7 +68,7 @@ insert into usuarios.usuario (ID_USUARIO, ID_RECOMENDANTE,ES_ADMINISTRADOR,ES_CO
 -- ###				CONDUCTOR					#####
 -- ##################################################
 insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
-	select '4','1234ABCD','2025-05-25','descripción ingeniosa 4', *from OpenRowset(Bulk 'C:\Users\cmal1\Documents\Universidad\Semestre6\Bases de datos\proyectofinal\Appsafe\imag\Processing.png', Single_Blob) As ProductosFoto
+	select '4','1234ABCD','2025-05-25','descripción ingeniosa 4', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor4.png', Single_Blob) As ProductosFoto
 	go
 insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
 	select '5','6852AZCY','2025-05-25','descripción mas ingeniosa', *from OpenRowset(Bulk 'C:\Users\cmal1\Documents\Universidad\Semestre6\Bases de datos\proyectofinal\Appsafe\imag\Processing.png', Single_Blob) As ProductosFoto
@@ -157,18 +157,18 @@ COMMIT TRANSACTION
 			(7, 'X5', 3),
 			(8, 'Serie 3', 3),
 			(9, 'i4', 3);
-	
+
 
 -- ##################################################
 -- ###  				AUTO					#####
 -- ##################################################
 
 	insert into USUARIOS.automovil (ID_AUTOMOVIL,NUMPLACAS,AÑO,ID_USUARIO,ID_MODELO,DISPONIBLE,COLOR,NUMSERIE)
-	values  (1, 'ABC1234', 2021, 4, 1,1,NEGRO,'9XZ1L4M72V83Q7KJP'),
-			(2, 'XYZ5678', 2020, 5, 4,1,BLANCO,	'B3W9A8XTR2M6D1NQ7'),
-			(3, 'LMN9012', 2022, 6, 7,1,VERDE, 'J7K8L5QZ92TAXY3WV'),
-			(4, 'QRS3456', 2020, 7, 2,1,AMARILLO,'MZ0X2Y7V9RQP3L8TN'),
-			(5, 'TUV7890', 2021, 8, 8,1,NEGRO, 'Y6WQ91MNB3L7XZV2K');
+	values  (1, 'ABC1234', 2021, 4, 1,1,'NEGRO','9XZ1L4M72V83Q7KJP'),
+			(2, 'XYZ5678', 2020, 5, 4,1,'BLANCO',	'B3W9A8XTR2M6D1NQ7'),
+			(3, 'LMN9012', 2022, 6, 7,1,'VERDE', 'J7K8L5QZ92TAXY3WV'),
+			(4, 'QRS3456', 2020, 7, 2,1,'AMARILLO','MZ0X2Y7V9RQP3L8TN'),
+			(5, 'TUV7890', 2021, 8, 8,1,'NEGRO', 'Y6WQ91MNB3L7XZV2K');
 
 -- ##################################################
 -- ###					PAGO					#####
