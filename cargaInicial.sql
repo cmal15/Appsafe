@@ -54,6 +54,8 @@ COMMIT TRANSACTION
 -- ##################################################
 -- ##					USUARIO					#####
 -- ##################################################
+
+begin tran
 insert into usuarios.usuario (ID_USUARIO, ID_RECOMENDANTE,ES_ADMINISTRADOR,ES_CONDUCTOR, ES_CLIENTE,CONTRASEÑA,NOMBRE_USUARIO,CORREO,NOMBRE,APELLIDO1,APELLIDO2)
 	values  (1, NULL, 1, 0, 0, 'Lorem4*', 'CCGREEN', 'green@example.com', 'Alan', 'Turing', NULL),
 			(2, NULL, 1, 0, 0, 'Ipsum10*', 'GGMur', 'germ@example.com', 'Jonh', 'Doe', 'Second'),
@@ -62,14 +64,16 @@ insert into usuarios.usuario (ID_USUARIO, ID_RECOMENDANTE,ES_ADMINISTRADOR,ES_CO
 			(5, 4, 0, 0, 0, 'Driver456#', 'driver_luis', 'luis@transporte.com', 'Luis', 'Martínez', 'Gómez'),
 			(6, NULL, 0, 0, 0, 'Client789&', 'cliente_ana', 'ana@email.com', 'Ana', 'López', NULL),
 			(7, 5, 0, 0, 0, 'Mix123&', 'usuario_mixto', 'mix@ejemplo.com', 'Jorge', 'Ramírez', 'Díaz'),
-			(8, NULL, 0, 1, 1, 'Cont23*', 'client_maria', 'maria@clientes.com', 'María', 'Santos', 'Delgado'),
-			(9, 6, 0, 1, 0, 'Secure#91', 'cliente_jorge', 'jorge@clientes.com', 'Jorge', 'Mendoza', 'Ruiz'),
-			(10, NULL, 0, 1, 0, 'Drive*88!', 'chofer_pedro', 'pedro@transporte.com', 'Pedro', 'González', NULL),
-			(11, 2, 1, 1, 0, 'AdminX@33', 'super_admin', 'admin2@empresa.com', 'Lucía', 'Navarro', 'Sierra'),
-			(12, 1, 0, 1, 0, 'ClienT#2025', 'client_roberto', 'roberto@clientes.com', 'Roberto', 'Fernández', NULL);
+			(8, NULL, 0, 1, 0, 'Cont23*', 'client_maria', 'maria@clientes.com', 'María', 'Santos', 'Delgado'),
+			(9, 6, 0, 1, 0, 'Secu#91', 'cliente_jorge', 'jorge@clientes.com', 'Jorge', 'Mendoza', 'Ruiz'),
+			(10, NULL, 0, 1, 0, 'Driv*88', 'chofer_pedro', 'pedro@transporte.com', 'Pedro', 'González', NULL),
+			(11, 2, 0, 1, 0, 'Admi*33', 'super_admin', 'admin2@empresa.com', 'Lucía', 'Navarro', 'Sierra'),
+			(12, 1, 0, 1, 0, 'Clie*202', 'client_roberto', 'roberto@clientes.com', 'Roberto', 'Fernández', NULL);
+commit tran
 -- ##################################################
 -- ###				CONDUCTOR					#####
 -- ##################################################
+begin tran
 INSERT INTO USUARIOS.conductor (ID_USUARIO, LICENCIA, VIGENCIA, DESCRIPCION, FOTO)
 SELECT '9', '1234ABCD', '2025-05-25', 'Conductor con historial limpio y excelente sentido de responsabilidad al volante.', 
 * FROM OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor4.png', Single_Blob) AS ProductosFoto;
@@ -94,6 +98,7 @@ INSERT INTO USUARIOS.conductor (ID_USUARIO, LICENCIA, VIGENCIA, DESCRIPCION, FOT
 SELECT '8', '4568USAD', '2025-05-25', 'Conductor confiable, con amplio conocimiento de la ciudad y enfoque en atención al usuario.', 
 * FROM OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor8.png', Single_Blob) AS ProductosFoto;
 GO
+commit tran
 
 -- ##################################################
 -- ##			 ADMINISTRADOR					#####
@@ -174,7 +179,7 @@ COMMIT TRANSACTION
 -- ##################################################
 -- ###  				AUTO					#####
 -- ##################################################
-
+begin tran
 	insert into USUARIOS.automovil (ID_AUTOMOVIL,NUMPLACAS,AÑO,ID_USUARIO,ID_MODELO,DISPONIBLE,COLOR,NUMSERIE)
 	values  (1, 'ABC1234', 2021, 9, 1,1,'NEGRO','9XZ1L4M72V83Q7KJP'),
 			(2, 'XYZ5678', 2020, 10, 4,1,'BLANCO',	'B3W9A8XTR2M6D1NQ7'),
@@ -183,10 +188,11 @@ COMMIT TRANSACTION
 			(5, 'TUV7890', 2021, 8, 3,1,'NEGRO', 'Y6WQ91MNB3L7XZV2K'),
 			(6, 'WXY1234', 2022, 8, 5, 1, 'AZUL', 'L9P8O7I6U5Y4T3R2E'),
 			(7, 'ZAB5678', 2023, 10, 8, 1, 'BLANCO', 'Q1W2E3R4T5Y6U7I8O');
+commit tran
 -- ##################################################
 -- ###					PAGO					#####
 -- ##################################################
-select * from OPERACIONES.PAGO
+begin tran
 	insert into OPERACIONES.PAGO(ID_USUARIO,FOLIO,MONTO,FECHA)
 			--pagos para ID 4
 	values  (9, 1, 3200, '2025-04-28'),
@@ -212,10 +218,11 @@ select * from OPERACIONES.PAGO
 			(8, 1, 5000, '2025-04-28'),
 			(8, 2, 3900, '2025-05-05'),
 			(8, 3, 3400, '2025-05-12');
-
+commit tran
 -- ##################################################
 -- ###  				ESTADO					#####
 -- ##################################################
+begin tran
 INSERT INTO CATALOGOS.ESTADO (NOMBRE_ESTADO)
 VALUES ('CDMX'), 
 		('Aguascalientes'),
@@ -249,12 +256,13 @@ VALUES ('CDMX'),
 		('Veracruz de Ignacio de la Llave'),
 		('Yucatán'),
 		('Zacatecas');
-
+commit tran
 -- ##################################################
 -- ###  				ALCALDIA				#####
 -- ##################################################
 
 --Por el momento agregaremos de la CDMX
+begin tran
 INSERT INTO CATALOGOS.ALCALDIA (NOMBRE_ALCALDIA, ID_ESTADO) 
 VALUES	('Álvaro Obregón', 1), --1
 		('Azcapotzalco', 1), --2
@@ -272,13 +280,14 @@ VALUES	('Álvaro Obregón', 1), --1
 		('Tlalpan', 1), --14
 		('Venustiano Carranza', 1), --15
 		('Xochimilco', 1); --16
-
+commit tran
 
 -- ##################################################
 -- ###  				COLONIA					#####
 -- ##################################################
 
 --Por el momento agregaremos de la CDMX
+begin tran
 INSERT INTO CATALOGOS.COLONIA (NOMBRE_COLONIA, ID_ALCALDIA)
 VALUES ('Acueducto', 1),
 	   ('Ave Real', 1),
@@ -328,7 +337,7 @@ VALUES ('Acueducto', 1),
 	   ('La Noria', 16),
 	   ('Barrio 18', 16),
 	   ('Ampliacion Nativita', 16);
-
+commit tran
 
 
 -- ##################################################
@@ -382,7 +391,6 @@ DISABLE TRIGGER ALL ON OPERACIONES.VIAJE
 
 BEGIN TRANSACTION VIAJES_CARGA_INICIAL
 
-select * from OPERACIONES.VIAJE where ID_USUARIO=3
 INSERT INTO OPERACIONES.VIAJE( ID_VIAJE, FECHA_INICIOVIAJE, ORIGEN_LONGITUD, ORIGEN_LATITUD,
 							 DESTINO_LONGITUD, DESTINO_LATITUD, IMPORTE, PROPINA, ADEUDO,
                             CALIFICACION_CONDUCTOR, CALIFICACION_CLIENTE, COMENTARIO, 
@@ -390,22 +398,22 @@ INSERT INTO OPERACIONES.VIAJE( ID_VIAJE, FECHA_INICIOVIAJE, ORIGEN_LONGITUD, ORI
                             ID_AUTOMOVIL, ID_DESCUENTO)
 
 --15 viajes completos
-VALUES 	(1, '2025-05-23', -99.120200, 19.508300, -99.133209, 19.432608, 331, 10, 0.00, 2, 2, 'Viaje caro y tardado.', 1, 5, 1, 1, NULL, 1, 1),
+VALUES 	(1, '2025-05-23', -99.120200, 19.508300, -99.133209, 19.432608, 331, 10, 0.00, 2, 2, 'Viaje caro y tardado.', 1, 5, 1, 1, NULL, 1, null),
 		(2, '2025-06-23', -99.200500, 19.489100, -99.120200, 19.508300, 320, 15, 0.00, 1, 2, 'Mala actitud del conductor.', 1, 5, 2, 2, NULL, 2, NULL),
-		(3, '2025-07-24', -99.174600, 19.493900, -99.200500, 19.489100, 123, 20, 0.00, 2, 3, 'El auto estaba sucio.', 1, 5, 3, 3, NULL, 3, 2),
+		(3, '2025-07-24', -99.174600, 19.493900, -99.200500, 19.489100, 123, 20, 0.00, 2, 3, 'El auto estaba sucio.', 1, 5, 3, 3, NULL, 3, null),
 		(4, '2025-05-23', -99.175300, 19.378600, -99.174600, 19.493900, 112, 10, 0.00, 2, 2, 'No conocía la ruta.', 1, 5, 4, 4, NULL, 4, NULL),
 		(5, '2025-06-10', -99.139600, 19.455900, -99.175300, 19.378600, 358, 15, 0.00, 1, 2, 'Tardó demasiado en llegar.', 1, 5, 5, 5, NULL, 5, NULL),
-		(6, '2025-05-3', -99.161700, 19.288300, -99.139600, 19.455900, 98.23, 20, 0.00, 2, 1,'Conductor muy distraído.', 1, 5, 6, 6, NULL, 1, 3),
+		(6, '2025-05-3', -99.161700, 19.288300, -99.139600, 19.455900, 98.23, 20, 0.00, 2, 1,'Conductor muy distraído.', 1, 5, 6, 6, NULL, 1, null),
 		(7, '2025-05-11', -99.071900, 19.436100, -99.161700, 19.288300, 332, 15, 0.00, 3, 2, 'Viaje incómodo y ruidoso.', 1, 5, 7, 7, NULL, 2, NULL),
 
 		(8, '2025-06-7', -99.200800, 19.433400, -99.071900, 19.436100, 237, 20, 0.00, 5, 5, 'Excelente trato y puntualidad.', 1, 5, 8, 8, NULL, 1, NULL),
-		(9, '2025-07-8', -99.270000, 19.360000, -99.200800, 19.433400, 420, 20, 0.00, 5, 5, 'Muy buen servicio, gracias.', 1, 5, 1, 1, NULL, 2, 1),
+		(9, '2025-07-8', -99.270000, 19.360000, -99.200800, 19.433400, 420, 20, 0.00, 5, 5, 'Muy buen servicio, gracias.', 1, 5, 1, 1, NULL, 2, null),
 		(10, '2025-05-23', -99.152000, 19.416000, -99.270000, 19.360000, 230, 15, 0.00, 4, 5, 'Conductor amable y eficiente.', 1, 5, 2, 2, NULL, 1, NULL),
-		(11, '2025-06-23', -99.096300, 19.267300, -99.152000, 19.416000, 106, 15, 0.00, 4, 4, 'Auto limpio y cómodo.', 1, 5, 3, 3, NULL, 4, 2),
+		(11, '2025-06-23', -99.096300, 19.267300, -99.152000, 19.416000, 106, 15, 0.00, 4, 4, 'Auto limpio y cómodo.', 1, 5, 3, 3, NULL, 4, null),
 		(12, '2025-07-23', -99.186000, 19.332200, -99.096300, 19.267300, 89, 15, 0.00, 5, 5, 'Todo salió perfecto.', 1, 5, 4, 4, NULL, 5, NULL),
-		(13, '2025-08-23', -99.162703, 19.346679, -99.186000, 19.332200, 56, 10, 0.00, 5, 5, 'Excelente manejo y cortesía.', 1, 5, 5, 5, NULL, 3, 3),
+		(13, '2025-08-23', -99.162703, 19.346679, -99.186000, 19.332200, 56, 10, 0.00, 5, 5, 'Excelente manejo y cortesía.', 1, 5, 5, 5, NULL, 3, null),
 		(14, '2025-09-23', -99.181153, 19.420380, -99.162703, 19.346679, 235, 20, 0.00, 4, 4, 'Sin contratiempos, muy bien.', 1, 5, 6, 6, NULL, 4, NULL),
-		(15, '2025-10-23', -99.133209, 19.432608, -99.181153, 19.420380, 245, 15, 0.00, 5, 5, 'Recomiendo este conductor.', 1, 5, 7, 7, NULL, 5, 1),
+		(15, '2025-10-23', -99.133209, 19.432608, -99.181153, 19.420380, 245, 15, 0.00, 5, 5, 'Recomiendo este conductor.', 1, 5, 7, 7, NULL, 5, null),
 
 --5 viajes programados
 		(16, '2025-01-20', -99.1332, 19.4326, -99.1400, 19.4400, 215.50, 15, 0.00, 5, 5, 'Viaje rápido y seguro.', 1, 2, 1, 1, NULL, NULL, NULL),
@@ -435,8 +443,6 @@ GO
 COMMIT TRANSACTION;
 
 ENABLE TRIGGER ALL ON OPERACIONES.VIAJE
-
-select * from OPERACIONES.VIAJE
 
  --##################################################
 -- ###				VIAJE_ESTATUS				#####
@@ -629,6 +635,7 @@ GO
  --##################################################
 -- ###				ACCIDENTE					#####
 -- ##################################################
+
 INSERT INTO INCIDENCIAS.ACCIDENTE (
     ID_ACCIDENTE,FECHA,LONGITUD,
     LATITUD,HERIDOS,MONTO,
@@ -769,3 +776,27 @@ UPDATE OPERACIONES.VIAJE
 SET ID_FACTURA = 3
 WHERE ID_VIAJE = 4;
 
+-- ##################################################
+-- ###				DESCUENTOS						#####
+-- ##################################################
+insert into OPERACIONES.DESCUENTO_USUARIO_VIAJE (ID_USUARIO,ID_DESCUENTO)
+values	(1,1),
+		(3,2),
+		(5,3),
+		(8,1),
+		(2,2);
+UPDATE OPERACIONES.VIAJE
+SET ID_DESCUENTO = 1
+WHERE ID_VIAJE = 1;
+UPDATE OPERACIONES.VIAJE
+SET ID_DESCUENTO = 2
+WHERE ID_VIAJE = 3;
+UPDATE OPERACIONES.VIAJE
+SET ID_DESCUENTO = 3
+WHERE ID_VIAJE = 5;
+UPDATE OPERACIONES.VIAJE
+SET ID_DESCUENTO = 1
+WHERE ID_VIAJE = 8;
+UPDATE OPERACIONES.VIAJE
+SET ID_DESCUENTO = 2
+WHERE ID_VIAJE = 10;
