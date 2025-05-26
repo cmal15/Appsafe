@@ -163,12 +163,12 @@ COMMIT TRANSACTION
 -- ###  				AUTO					#####
 -- ##################################################
 
-	insert into USUARIOS.automovil (ID_AUTOMOVIL,NUMPLACAS,AÑO,ID_USUARIO,ID_MODELO)
-	values  (1, 'ABC1234', 2021, 4, 1),
-			(2, 'XYZ5678', 2020, 5, 4),
-			(3, 'LMN9012', 2022, 6, 7),
-			(4, 'QRS3456', 2020, 7, 2),
-			(5, 'TUV7890', 2021, 8, 8);
+	insert into USUARIOS.automovil (ID_AUTOMOVIL,NUMPLACAS,AÑO,ID_USUARIO,ID_MODELO,DISPONIBLE,COLOR,NUMSERIE)
+	values  (1, 'ABC1234', 2021, 4, 1,1,NEGRO,'9XZ1L4M72V83Q7KJP'),
+			(2, 'XYZ5678', 2020, 5, 4,1,BLANCO,	'B3W9A8XTR2M6D1NQ7'),
+			(3, 'LMN9012', 2022, 6, 7,1,VERDE, 'J7K8L5QZ92TAXY3WV'),
+			(4, 'QRS3456', 2020, 7, 2,1,AMARILLO,'MZ0X2Y7V9RQP3L8TN'),
+			(5, 'TUV7890', 2021, 8, 8,1,NEGRO, 'Y6WQ91MNB3L7XZV2K');
 
 -- ##################################################
 -- ###					PAGO					#####
