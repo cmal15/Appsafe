@@ -53,9 +53,48 @@ GO
 /*
  * 2. Consolidado mensual; día, monto total, monto mensual
 */
-
-
-
+CREATE PROCEDURE CONSOLIDADO_MENSUAL
+@mes int,
+@YEAR INT
+AS
+BEGIN
+select FECHA = CASE CAST(DAY(FECHA_INICIOVIAJE) AS VARCHAR) 
+			when '1' THEN '01'
+			when '2' THEN '02'
+			when '3' THEN '03'
+			when '4' THEN '04'
+			when '5' THEN '05'
+			when '6' THEN '06'
+			when '7' THEN '07'
+			when '8' THEN '08'
+			when '9' THEN '09'
+			ELSE CAST(DAY(FECHA_INICIOVIAJE) AS VARCHAR)
+			end, SUM(IMPORTE) as TOTAL
+from OPERACIONES.VIAJE
+where month(FECHA_INICIOVIAJE) = @mes and year(FECHA_INICIOVIAJE)= @YEAR
+GROUP BY DAY(FECHA_INICIOVIAJE)
+UNION
+select fecha = CASE MONTH(FECHA_INICIOVIAJE)
+    WHEN 1 THEN 'ENERO'
+    WHEN 2 THEN 'FEBRERO'
+    WHEN 3 THEN 'MARZO'
+    WHEN 4 THEN 'ABRIL'
+    WHEN 5 THEN 'MAYO'
+    WHEN 6 THEN 'JUNIO'
+    WHEN 7 THEN 'JULIO'
+    WHEN 8 THEN 'AGOSTO'
+    WHEN 9 THEN 'SEPTIEMBRE'
+    WHEN 10 THEN 'OCTUBRE'
+    WHEN 11 THEN 'NOVIEMBRE'
+    WHEN 12 THEN 'DICIEMBRE'
+    END ,SUM(IMPORTE) as TOTAL_MES
+from OPERACIONES.VIAJE
+where month(FECHA_INICIOVIAJE) = @mes and year(FECHA_INICIOVIAJE)= @YEAR
+GROUP BY MONTH(FECHA_INICIOVIAJE)
+end
+go
+exec CONSOLIDADO_MENSUAL @mes=7, @year=2025
+go
 /*
  * 3. Top 5 de conductores por un periodo de tiempo
 */ 
@@ -222,11 +261,32 @@ from USUARIOS.AUTOMOVIL as a
 join USUARIOS.USUARIO as u on u.ID_USUARIO=a.ID_USUARIO
 join CATALOGOS.MODELO as mo on mo.ID_MODELO=a.id_modelo 
 join CATALOGOS.MARCA  as ma on ma.ID_MARCA=mo.ID_MARCA
-
+go
 
 /*
  * 10. Listado de quejas incluyendo el conductor y auto, con filtro para obtenerse por un periodo de tiempo o por
  * conductor
 */
+CREATE PROCEDURE LISTA_DE_QUEJAS
+@FechaInicio date,
+@FechaFin date,
+@IDConductor int
+AS
+BEGIN
+	select U.NOMBRE + ' ' + U.APELLIDO1 +ISNULL( ' '+U.APELLIDO2,'') AS 'NOMBRE COMPLETO', u.ID_USUARIO,
+	cq.MOTIVO as motivo, q.DESCRIPCION_QUEJA,q.DESCRIPCION_RESOLUCION,q.FECHA_GENERACION, q.FECHA_RESOLUCION,M.NOMBRE_MODELO, A.NUMPLACAS
+	from OPERACIONES.VIAJE AS V
+	join INCIDENCIAS.QUEJA as q on v.ID_VIAJE=q.ID_VIAJE
+	join USUARIOS.AUTOMOVIL as a on v.ID_AUTOMOVIL=a.ID_AUTOMOVIL
+	join CATALOGOS.CATALOGO_QUEJAS as cq on cq.ID_CATALOGO_QUEJAS=q.ID_CATALOGO_QUEJAS
+	join USUARIOS.USUARIO as u on a.ID_USUARIO=u.ID_USUARIO
+	join CATALOGOS.MODELO as m on a.ID_MODELO=m.ID_MODELO
+	  WHERE 
+        (@FechaInicio IS NULL OR q.FECHA_GENERACION >= @FechaInicio)
+        AND (@FechaFin IS NULL OR q.FECHA_RESOLUCION <= @FechaFin)
+        AND (@IDConductor IS NULL OR u.ID_USUARIO = @IDConductor)
 
+END;
+GO
 
+exec LISTA_DE_QUEJAS @FechaInicio='2025/05/01' ,@FechaFin = '2025/05/30', @IDConductor = 4
