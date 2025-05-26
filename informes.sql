@@ -274,10 +274,10 @@ BEGIN
 END;
 select  * from USUARIOS.AUTOMOVIL
 GO
-
+/*
 EXECUTE ESTRELLAS_CONDUCTORES
 GO;
-
+*/
 /*
 EXEC ESTRELLAS_CONDUCTORES
 */
@@ -325,3 +325,4 @@ GO
 /*
 exec LISTA_DE_QUEJAS @FechaInicio='2025/05/01' ,@FechaFin = '2025/07/30', @IDConductor = null
 */
+
