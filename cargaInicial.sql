@@ -382,7 +382,7 @@ DISABLE TRIGGER ALL ON OPERACIONES.VIAJE
 
 BEGIN TRANSACTION VIAJES_CARGA_INICIAL
 
-
+select * from OPERACIONES.VIAJE where ID_USUARIO=3
 INSERT INTO OPERACIONES.VIAJE( ID_VIAJE, FECHA_INICIOVIAJE, ORIGEN_LONGITUD, ORIGEN_LATITUD,
 							 DESTINO_LONGITUD, DESTINO_LATITUD, IMPORTE, PROPINA, ADEUDO,
                             CALIFICACION_CONDUCTOR, CALIFICACION_CLIENTE, COMENTARIO, 
@@ -390,22 +390,22 @@ INSERT INTO OPERACIONES.VIAJE( ID_VIAJE, FECHA_INICIOVIAJE, ORIGEN_LONGITUD, ORI
                             ID_AUTOMOVIL, ID_DESCUENTO)
 
 --15 viajes completos
-VALUES 	(1, '2025-05-23', -99.120200, 19.508300, -99.133209, 19.432608, 331, 10, 0.00, 2, 2, 'Viaje caro y tardado.', 1, 5, 1, 1, NULL, 1, NULL),
+VALUES 	(1, '2025-05-23', -99.120200, 19.508300, -99.133209, 19.432608, 331, 10, 0.00, 2, 2, 'Viaje caro y tardado.', 1, 5, 1, 1, NULL, 1, 1),
 		(2, '2025-06-23', -99.200500, 19.489100, -99.120200, 19.508300, 320, 15, 0.00, 1, 2, 'Mala actitud del conductor.', 1, 5, 2, 2, NULL, 2, NULL),
-		(3, '2025-07-24', -99.174600, 19.493900, -99.200500, 19.489100, 123, 20, 0.00, 2, 3, 'El auto estaba sucio.', 1, 5, 3, 3, NULL, 3, NULL),
+		(3, '2025-07-24', -99.174600, 19.493900, -99.200500, 19.489100, 123, 20, 0.00, 2, 3, 'El auto estaba sucio.', 1, 5, 3, 3, NULL, 3, 2),
 		(4, '2025-05-23', -99.175300, 19.378600, -99.174600, 19.493900, 112, 10, 0.00, 2, 2, 'No conocía la ruta.', 1, 5, 4, 4, NULL, 4, NULL),
 		(5, '2025-06-10', -99.139600, 19.455900, -99.175300, 19.378600, 358, 15, 0.00, 1, 2, 'Tardó demasiado en llegar.', 1, 5, 5, 5, NULL, 5, NULL),
-		(6, '2025-05-3', -99.161700, 19.288300, -99.139600, 19.455900, 98.23, 20, 0.00, 2, 1,'Conductor muy distraído.', 1, 5, 6, 6, NULL, 1, NULL),
+		(6, '2025-05-3', -99.161700, 19.288300, -99.139600, 19.455900, 98.23, 20, 0.00, 2, 1,'Conductor muy distraído.', 1, 5, 6, 6, NULL, 1, 3),
 		(7, '2025-05-11', -99.071900, 19.436100, -99.161700, 19.288300, 332, 15, 0.00, 3, 2, 'Viaje incómodo y ruidoso.', 1, 5, 7, 7, NULL, 2, NULL),
 
 		(8, '2025-06-7', -99.200800, 19.433400, -99.071900, 19.436100, 237, 20, 0.00, 5, 5, 'Excelente trato y puntualidad.', 1, 5, 8, 8, NULL, 1, NULL),
-		(9, '2025-07-8', -99.270000, 19.360000, -99.200800, 19.433400, 420, 20, 0.00, 5, 5, 'Muy buen servicio, gracias.', 1, 5, 1, 1, NULL, 2, NULL),
+		(9, '2025-07-8', -99.270000, 19.360000, -99.200800, 19.433400, 420, 20, 0.00, 5, 5, 'Muy buen servicio, gracias.', 1, 5, 1, 1, NULL, 2, 1),
 		(10, '2025-05-23', -99.152000, 19.416000, -99.270000, 19.360000, 230, 15, 0.00, 4, 5, 'Conductor amable y eficiente.', 1, 5, 2, 2, NULL, 1, NULL),
-		(11, '2025-06-23', -99.096300, 19.267300, -99.152000, 19.416000, 106, 15, 0.00, 4, 4, 'Auto limpio y cómodo.', 1, 5, 3, 3, NULL, 4, NULL),
+		(11, '2025-06-23', -99.096300, 19.267300, -99.152000, 19.416000, 106, 15, 0.00, 4, 4, 'Auto limpio y cómodo.', 1, 5, 3, 3, NULL, 4, 2),
 		(12, '2025-07-23', -99.186000, 19.332200, -99.096300, 19.267300, 89, 15, 0.00, 5, 5, 'Todo salió perfecto.', 1, 5, 4, 4, NULL, 5, NULL),
-		(13, '2025-08-23', -99.162703, 19.346679, -99.186000, 19.332200, 56, 10, 0.00, 5, 5, 'Excelente manejo y cortesía.', 1, 5, 5, 5, NULL, 3, NULL),
+		(13, '2025-08-23', -99.162703, 19.346679, -99.186000, 19.332200, 56, 10, 0.00, 5, 5, 'Excelente manejo y cortesía.', 1, 5, 5, 5, NULL, 3, 3),
 		(14, '2025-09-23', -99.181153, 19.420380, -99.162703, 19.346679, 235, 20, 0.00, 4, 4, 'Sin contratiempos, muy bien.', 1, 5, 6, 6, NULL, 4, NULL),
-		(15, '2025-10-23', -99.133209, 19.432608, -99.181153, 19.420380, 245, 15, 0.00, 5, 5, 'Recomiendo este conductor.', 1, 5, 7, 7, NULL, 5, NULL),
+		(15, '2025-10-23', -99.133209, 19.432608, -99.181153, 19.420380, 245, 15, 0.00, 5, 5, 'Recomiendo este conductor.', 1, 5, 7, 7, NULL, 5, 1),
 
 --5 viajes programados
 		(16, '2025-01-20', -99.1332, 19.4326, -99.1400, 19.4400, 215.50, 15, 0.00, 5, 5, 'Viaje rápido y seguro.', 1, 2, 1, 1, NULL, NULL, NULL),
@@ -747,5 +747,25 @@ VALUES
 -- ##################################################
 -- ###				FACTURA						#####
 -- ##################################################
+INSERT INTO operaciones.FACTURA (ID_FACTURA, ID_USUARIO, IMPORTE, FECHA)
+VALUES (1, 1, 331.0, '2025-05-23'), 
+	   (2, 2, 580.0, '2025-06-23'), 
+       (3, 3, 143.0, '2025-07-26'), 
+       (4, 4, 122.0, '2025-05-30'); 
 
+UPDATE OPERACIONES.VIAJE
+SET ID_FACTURA = 1
+WHERE ID_VIAJE = 1;
+
+UPDATE OPERACIONES.VIAJE
+SET ID_FACTURA = 2
+WHERE ID_VIAJE in (2,10);
+
+UPDATE OPERACIONES.VIAJE
+SET ID_FACTURA = 3
+WHERE ID_VIAJE = 3;
+
+UPDATE OPERACIONES.VIAJE
+SET ID_FACTURA = 3
+WHERE ID_VIAJE = 4;
 
