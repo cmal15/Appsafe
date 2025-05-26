@@ -50,6 +50,9 @@ BEGIN
     JOIN USUARIOS.USUARIO AS U ON U.ID_USUARIO = C.ID_USUARIO;
 END;
 GO
+
+EXECUTE OBTENER_DATOS_CONDUCTOR @FECHA_INICIO='2025-04-25', @FECHA_FIN='2025-05-25'
+GO;
 /*
  * 2. Consolidado mensual; día, monto total, monto mensual
 */
@@ -118,6 +121,9 @@ BEGIN
 	ORDER BY COUNT(*) DESC
 END;
 GO
+
+EXECUTE OBTENER_TOP_CONDUCTORES @FECHA_INICIO='2025-04-25', @FECHA_FIN='2025-05-25'
+GO;
 /*
  * 4. Top 5 de clientes, es decir, los clientes con mayor número de viajes (nombre completo y correo)
 */
@@ -151,6 +157,10 @@ BEGIN
 
 END;
 GO
+
+EXECUTE OBTENER_TOP_CLIENTES @FECHA_INICIO='2025-04-25', @FECHA_FIN='2025-05-25'
+GO;
+
 /*
  * 5. Listado de conductores con más quejas y motivo (se maneja un catálogo, ejemplo, irrespetuoso, maneja
  * muy rápido, no respeta las reglas de vialidad, etc.)
@@ -177,6 +187,8 @@ BEGIN
 END;
 GO
 
+EXECUTE CONDUCTORES_CON_MAS_QUEJAS
+GO;
 
 /*
  * 6. Listado de accidentes; fecha, ubicación, tipo, descripción, heridos si o no, monto gastado, nombre del
@@ -211,7 +223,8 @@ BEGIN
 END;
 GO
 
-
+EXECUTE OBTENER_ACCIDENTES @FECHA_INICIO='2025-04-25', @FECHA_FIN='2025-05-25'
+GO;
 
 /*
  * 7. Listado de los clientes con menos estrellas
@@ -231,6 +244,8 @@ BEGIN
 END;
 GO
 
+EXECUTE CLIENTES_CON_MENOS_ESTRELLAS
+GO
 
 /*
  * 8. Listado de los conductores con el total que les han dado por cada estrella
@@ -251,6 +266,9 @@ BEGIN
 END;
 select  * from USUARIOS.AUTOMOVIL
 GO
+
+EXECUTE ESTRELLAS_CONDUCTORES
+GO;
 
 /*
  * 9. Listado de autos, placa, número de serie, marca, modelo, año y color y su dueño
