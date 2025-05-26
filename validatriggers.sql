@@ -1,5 +1,4 @@
 /*
- * ER/Studio 8.0 SQL Code Generation
  * Company :      FIUNAM
  * Project :      1Equipo-Appsafe.DM1
  * Authors :      Alvarez Lopez Carlos Manuel
