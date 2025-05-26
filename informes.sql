@@ -50,9 +50,11 @@ BEGIN
     JOIN USUARIOS.USUARIO AS U ON U.ID_USUARIO = C.ID_USUARIO;
 END;
 GO
+/*
+exec OBTENER_DATOS_CONDUCTOR @FECHA_INICIO='2025/05/01', @FECHA_FIN='2025/07/01'
+GO
+*/
 
-EXECUTE OBTENER_DATOS_CONDUCTOR @FECHA_INICIO='2025-04-25', @FECHA_FIN='2025-05-25'
-GO;
 /*
  * 2. Consolidado mensual; día, monto total, monto mensual
 */
@@ -96,8 +98,12 @@ where month(FECHA_INICIOVIAJE) = @mes and year(FECHA_INICIOVIAJE)= @YEAR
 GROUP BY MONTH(FECHA_INICIOVIAJE)
 end
 go
-exec CONSOLIDADO_MENSUAL @mes=7, @year=2025
+
+/*
+exec CONSOLIDADO_MENSUAL @mes=6, @year=2025
 go
+*/
+
 /*
  * 3. Top 5 de conductores por un periodo de tiempo
 */ 
@@ -121,9 +127,10 @@ BEGIN
 	ORDER BY COUNT(*) DESC
 END;
 GO
-
-EXECUTE OBTENER_TOP_CONDUCTORES @FECHA_INICIO='2025-04-25', @FECHA_FIN='2025-05-25'
-GO;
+/*
+exec OBTENER_DATOS_CONDUCTOR @FECHA_INICIO='2025/05/01', @FECHA_FIN='2025/06/01'
+GO
+*/
 /*
  * 4. Top 5 de clientes, es decir, los clientes con mayor número de viajes (nombre completo y correo)
 */
@@ -157,10 +164,10 @@ BEGIN
 
 END;
 GO
-
-EXECUTE OBTENER_TOP_CLIENTES @FECHA_INICIO='2025-04-25', @FECHA_FIN='2025-05-25'
-GO;
-
+/*
+exec OBTENER_TOP_CLIENTES @FECHA_INICIO='2025/05/01', @FECHA_FIN='2025/06/01'
+GO
+*/
 /*
  * 5. Listado de conductores con más quejas y motivo (se maneja un catálogo, ejemplo, irrespetuoso, maneja
  * muy rápido, no respeta las reglas de vialidad, etc.)
@@ -174,7 +181,7 @@ BEGIN
 	join USUARIOS.AUTOMOVIL as a on v.ID_AUTOMOVIL=a.ID_AUTOMOVIL
 	group by a.ID_AUTOMOVIL)
 
-	select dq.num_quejas, U.NOMBRE + ' ' + U.APELLIDO1 +ISNULL( ' '+U.APELLIDO2,'') AS 'NOMBRE COMPLETO', u.ID_USUARIO,
+	select dq.num_quejas, U.NOMBRE + ' ' + U.APELLIDO1 +ISNULL( ' '+U.APELLIDO2,'') AS 'NOMBRE COMPLETO', u.ID_USUARIO as ID_CONDUCTOR,
 	cq.MOTIVO as motivo
 	from datos_quejas as dq
 	join OPERACIONES.VIAJE as v on dq.ID_AUTOMOVIL=v.ID_AUTOMOVIL
@@ -183,12 +190,12 @@ BEGIN
 	join CATALOGOS.CATALOGO_QUEJAS
 	as cq on cq.ID_CATALOGO_QUEJAS=q.ID_CATALOGO_QUEJAS
 	join USUARIOS.USUARIO as u on a.ID_USUARIO=u.ID_USUARIO
-	order by num_quejas, ID_USUARIO
+	order by num_quejas, ID_CONDUCTOR
 END;
 GO
-
-EXECUTE CONDUCTORES_CON_MAS_QUEJAS
-GO;
+/*
+EXEC CONDUCTORES_CON_MAS_QUEJAS
+*/
 
 /*
  * 6. Listado de accidentes; fecha, ubicación, tipo, descripción, heridos si o no, monto gastado, nombre del
@@ -222,9 +229,10 @@ BEGIN
 	
 END;
 GO
-
-EXECUTE OBTENER_ACCIDENTES @FECHA_INICIO='2025-04-25', @FECHA_FIN='2025-05-25'
-GO;
+/*
+exec OBTENER_ACCIDENTES @FECHA_INICIO='2025/05/01', @FECHA_FIN='2025/06/01'
+GO
+*/
 
 /*
  * 7. Listado de los clientes con menos estrellas
@@ -243,9 +251,9 @@ BEGIN
 	join datos_clientes_menos_estrellas as dcme on  dcme.ID_USUARIO=u.ID_USUARIO
 END;
 GO
-
-EXECUTE CLIENTES_CON_MENOS_ESTRELLAS
-GO
+/*
+EXEC CLIENTES_CON_MENOS_ESTRELLAS
+*/
 
 /*
  * 8. Listado de los conductores con el total que les han dado por cada estrella
@@ -271,16 +279,25 @@ EXECUTE ESTRELLAS_CONDUCTORES
 GO;
 
 /*
+EXEC ESTRELLAS_CONDUCTORES
+*/
+/*
  * 9. Listado de autos, placa, número de serie, marca, modelo, año y color y su dueño
 */
+CREATE PROCEDURE LISTADO_DE_AUTOS
+as
+BEGIN
 select a.ID_AUTOMOVIL, a.NUMPLACAS,a.NUMSERIE, ma.NOMBRE_MARCA,mo.NOMBRE_MODELO,a.AÑO,a.COLOR,
 U.NOMBRE + ' ' + U.APELLIDO1 +ISNULL( ' '+U.APELLIDO2,'') AS 'DUEÑO'
 from USUARIOS.AUTOMOVIL as a
 join USUARIOS.USUARIO as u on u.ID_USUARIO=a.ID_USUARIO
 join CATALOGOS.MODELO as mo on mo.ID_MODELO=a.id_modelo 
 join CATALOGOS.MARCA  as ma on ma.ID_MARCA=mo.ID_MARCA
+END;
 go
-
+/*
+EXEC LISTADO_DE_AUTOS
+*/
 /*
  * 10. Listado de quejas incluyendo el conductor y auto, con filtro para obtenerse por un periodo de tiempo o por
  * conductor
@@ -305,5 +322,6 @@ BEGIN
         AND (@IDConductor IS NULL OR u.ID_USUARIO = @IDConductor)
 END;
 GO
-
-exec LISTA_DE_QUEJAS @FechaInicio='2025/05/01' ,@FechaFin = '2025/05/30', @IDConductor = 4
+/*
+exec LISTA_DE_QUEJAS @FechaInicio='2025/05/01' ,@FechaFin = '2025/07/30', @IDConductor = null
+*/
