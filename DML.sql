@@ -6,8 +6,7 @@
 				  Membrilla Isaias I�aki Ramos
 				  Miram�n P�rez Jocelyn
  *
- * Date Created : Wednesday, April 16, 2025 17:39:49
- * Target DBMS : Microsoft SQL Server 2008
+
  */
 
  USE [APPSAFE]

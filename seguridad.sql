@@ -1,8 +1,10 @@
 /*
-EJEMPLO PARA CREAR USUARIOS
-ROLES Y PRIVILEGIOS
-*/
-
+ * Project :      1Equipo-Appsafe-informes y estadisticas
+ * Authors :      Alvarez Lopez Carlos Manuel
+				  Membrilla Isaias I�aki Ramos
+				  Miramón Pérez Jocelyn
+ *
+ */
 use APPSAFE
 go
 
