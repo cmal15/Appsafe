@@ -13,9 +13,19 @@
  USE [APPSAFE]
  GO
 -- ##################################################
--- ## TRIGGERS VIAJE_ESTATUS
+-- ## TRIGGERS CLIENTE
 -- ##################################################
 
+CREATE OR ALTER TRIGGER TR_ON_DELETE_CLIENTE
+ON USUARIOS.CLIENTE
+AFTER DELETE
+AS
+BEGIN
+	
+	DELETE FROM USUARIOS.TARJETA
+	WHERE ID_USUARIO IN (SELECT deleted.ID_USUARIO FROM deleted)
+
+END
 
 -- ##################################################
 -- ## TRIGGERS ACCIDENTE
