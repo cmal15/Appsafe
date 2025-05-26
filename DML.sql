@@ -146,6 +146,23 @@ AS
 
 	END;
 GO
+
+CREATE OR ALTER TRIGGER OPERACIONES.TRG_FACTURA_SET_IMPORTE
+ON  OPERACIONES.FACTURA
+INSTEAD OF INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO OPERACIONES.FACTURA (ID_FACTURA, ID_USUARIO, FECHA, IMPORTE)
+    SELECT ID_FACTURA,
+           ID_USUARIO,
+           FECHA,
+           0.00         
+    FROM   inserted;
+END;
+GO
+
 -- ##################################################
 -- ## TRIGGERS CONDUCTOR
 -- ##################################################
@@ -160,6 +177,30 @@ GO
 -- ##################################################
 -- ## TRIGGERS FACTURA
 -- ##################################################
+CREATE OR ALTER TRIGGER OPERACIONES.TRG_VIAJE_UPDATE_FACTURA_IMPORTE
+ON  OPERACIONES.VIAJE
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    ;WITH Cambios AS (
+        SELECT ID_FACTURA FROM inserted WHERE ID_FACTURA IS NOT NULL
+        UNION
+        SELECT ID_FACTURA FROM deleted  WHERE ID_FACTURA IS NOT NULL
+    )
+    UPDATE f
+       SET f.IMPORTE = COALESCE(v.Suma, 0.00)
+    FROM OPERACIONES.FACTURA f
+    JOIN Cambios            c ON c.ID_FACTURA = f.ID_FACTURA
+    CROSS APPLY (
+        SELECT SUM(TOTAL_PAGAR) AS Suma
+        FROM   OPERACIONES.VIAJE
+        WHERE  ID_FACTURA = f.ID_FACTURA
+    ) v;    
+END;
+GO
+
 
 -- TODO FOR UPDATE: VIAJE
 
