@@ -58,32 +58,35 @@ insert into usuarios.usuario (ID_USUARIO, ID_RECOMENDANTE,ES_ADMINISTRADOR,ES_CO
 	values  (1, NULL, 1, 0, 0, 'Lorem4*', 'CCGREEN', 'green@example.com', 'Alan', 'Turing', NULL),
 			(2, NULL, 1, 0, 0, 'Ipsum10*', 'GGMur', 'germ@example.com', 'Jonh', 'Doe', 'Second'),
 			(3, NULL, 1, 0, 0, '3Ste*rno', 'ERB', 'justice@example.com', 'Ada', 'Lovelance', NULL),
-			(4, NULL, 0, 1, 0, '123Admin1*', 'admin_user', 'admin@example.com', 'Carlos', 'Pérez', NULL),
-			(5, 4, 0, 1, 0, 'Driver456#', 'driver_luis', 'luis@transporte.com', 'Luis', 'Martínez', 'Gómez'),
-			(6, NULL, 0, 1, 0, 'Client789&', 'cliente_ana', 'ana@email.com', 'Ana', 'López', NULL),
-			(7, 5, 0, 1, 0, 'Mix123&', 'usuario_mixto', 'mix@ejemplo.com', 'Jorge', 'Ramírez', 'Díaz'),
-			(8, NULL, 0, 1, 0, 'Cont23*', 'client_maria', 'maria@clientes.com', 'María', 'Santos', 'Delgado');
-			
+			(4, NULL, 0, 0, 0, '123Admin1*', 'admin_user', 'admin@example.com', 'Carlos', 'Pérez', NULL),
+			(5, 4, 0, 0, 0, 'Driver456#', 'driver_luis', 'luis@transporte.com', 'Luis', 'Martínez', 'Gómez'),
+			(6, NULL, 0, 0, 0, 'Client789&', 'cliente_ana', 'ana@email.com', 'Ana', 'López', NULL),
+			(7, 5, 0, 0, 0, 'Mix123&', 'usuario_mixto', 'mix@ejemplo.com', 'Jorge', 'Ramírez', 'Díaz'),
+			(8, NULL, 0, 1, 1, 'Cont23*', 'client_maria', 'maria@clientes.com', 'María', 'Santos', 'Delgado'),
+			(9, 6, 0, 1, 0, 'Secure#91', 'cliente_jorge', 'jorge@clientes.com', 'Jorge', 'Mendoza', 'Ruiz'),
+			(10, NULL, 0, 1, 0, 'Drive*88!', 'chofer_pedro', 'pedro@transporte.com', 'Pedro', 'González', NULL),
+			(11, 2, 1, 1, 0, 'AdminX@33', 'super_admin', 'admin2@empresa.com', 'Lucía', 'Navarro', 'Sierra'),
+			(12, 1, 0, 1, 0, 'ClienT#2025', 'client_roberto', 'roberto@clientes.com', 'Roberto', 'Fernández', NULL);
 -- ##################################################
 -- ###				CONDUCTOR					#####
 -- ##################################################
 INSERT INTO USUARIOS.conductor (ID_USUARIO, LICENCIA, VIGENCIA, DESCRIPCION, FOTO)
-SELECT '4', '1234ABCD', '2025-05-25', 'Conductor con historial limpio y excelente sentido de responsabilidad al volante.', 
+SELECT '9', '1234ABCD', '2025-05-25', 'Conductor con historial limpio y excelente sentido de responsabilidad al volante.', 
 * FROM OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor4.png', Single_Blob) AS ProductosFoto;
 GO
 
 INSERT INTO USUARIOS.conductor (ID_USUARIO, LICENCIA, VIGENCIA, DESCRIPCION, FOTO)
-SELECT '5', '6852AZCY', '2025-05-25', 'Profesional comprometido con la seguridad y satisfacción del cliente en cada viaje.', 
+SELECT '10', '6852AZCY', '2025-05-25', 'Profesional comprometido con la seguridad y satisfacción del cliente en cada viaje.', 
 * FROM OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor5.png', Single_Blob) AS ProductosFoto;
 GO
 
 INSERT INTO USUARIOS.conductor (ID_USUARIO, LICENCIA, VIGENCIA, DESCRIPCION, FOTO)
-SELECT '6', '4678JHSJ', '2025-05-25', 'Experto en conducción urbana, con actitud proactiva y vocación de servicio.', 
+SELECT '11', '4678JHSJ', '2025-05-25', 'Experto en conducción urbana, con actitud proactiva y vocación de servicio.', 
 * FROM OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor6.png', Single_Blob) AS ProductosFoto;
 GO
 
 INSERT INTO USUARIOS.conductor (ID_USUARIO, LICENCIA, VIGENCIA, DESCRIPCION, FOTO)
-SELECT '7', '1569KLAS', '2025-05-25', 'Licencia vigente y comprobada experiencia en rutas de alta demanda. Siempre puntual.', 
+SELECT '12', '1569KLAS', '2025-05-25', 'Licencia vigente y comprobada experiencia en rutas de alta demanda. Siempre puntual.', 
 * FROM OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor7.png', Single_Blob) AS ProductosFoto;
 GO
 
@@ -173,36 +176,37 @@ COMMIT TRANSACTION
 -- ##################################################
 
 	insert into USUARIOS.automovil (ID_AUTOMOVIL,NUMPLACAS,AÑO,ID_USUARIO,ID_MODELO,DISPONIBLE,COLOR,NUMSERIE)
-	values  (1, 'ABC1234', 2021, 4, 1,1,'NEGRO','9XZ1L4M72V83Q7KJP'),
-			(2, 'XYZ5678', 2020, 5, 4,1,'BLANCO',	'B3W9A8XTR2M6D1NQ7'),
-			(3, 'LMN9012', 2022, 6, 7,1,'VERDE', 'J7K8L5QZ92TAXY3WV'),
-			(4, 'QRS3456', 2020, 7, 2,1,'AMARILLO','MZ0X2Y7V9RQP3L8TN'),
-			(5, 'TUV7890', 2021, 8, 8,1,'NEGRO', 'Y6WQ91MNB3L7XZV2K');
-
+	values  (1, 'ABC1234', 2021, 9, 1,1,'NEGRO','9XZ1L4M72V83Q7KJP'),
+			(2, 'XYZ5678', 2020, 10, 4,1,'BLANCO',	'B3W9A8XTR2M6D1NQ7'),
+			(3, 'LMN9012', 2022, 11, 7,1,'VERDE', 'J7K8L5QZ92TAXY3WV'),
+			(4, 'QRS3456', 2020, 12, 2,1,'AMARILLO','MZ0X2Y7V9RQP3L8TN'),
+			(5, 'TUV7890', 2021, 8, 3,1,'NEGRO', 'Y6WQ91MNB3L7XZV2K'),
+			(6, 'WXY1234', 2022, 8, 5, 1, 'AZUL', 'L9P8O7I6U5Y4T3R2E'),
+			(7, 'ZAB5678', 2023, 10, 8, 1, 'BLANCO', 'Q1W2E3R4T5Y6U7I8O');
 -- ##################################################
 -- ###					PAGO					#####
 -- ##################################################
 select * from OPERACIONES.PAGO
 	insert into OPERACIONES.PAGO(ID_USUARIO,FOLIO,MONTO,FECHA)
 			--pagos para ID 4
-	values  (4, 1, 3200, '2025-04-28'),
-			(4, 2, 4800, '2025-05-05'),
-			(4, 3, 3500, '2025-05-12'),
+	values  (9, 1, 3200, '2025-04-28'),
+			(9, 2, 4800, '2025-05-05'),
+			(9, 3, 3500, '2025-05-12'),
 
 			-- Pagos para ID 5
-			(5, 1, 3100, '2025-04-28'),
-			(5, 2, 4950, '2025-05-05'),
-			(5, 3, 3700, '2025-05-12'),
+			(10, 1, 3100, '2025-04-28'),
+			(10, 2, 4950, '2025-05-05'),
+			(10, 3, 3700, '2025-05-12'),
 
 			-- Pagos para ID 6
-			(6, 1, 4600, '2025-04-28'),
-			(6, 2, 3300, '2025-05-05'),
-			(6, 3, 4100, '2025-05-12'),
+			(11, 1, 4600, '2025-04-28'),
+			(11, 2, 3300, '2025-05-05'),
+			(11, 3, 4100, '2025-05-12'),
 
 			-- Pagos para ID 7
-			(7, 1, 3000, '2025-04-28'),
-			(7, 2, 4500, '2025-05-05'),
-			(7, 3, 3850, '2025-05-12'),
+			(12, 1, 3000, '2025-04-28'),
+			(12, 2, 4500, '2025-05-05'),
+			(12, 3, 3850, '2025-05-12'),
 
 			-- Pagos para ID 8
 			(8, 1, 5000, '2025-04-28'),
