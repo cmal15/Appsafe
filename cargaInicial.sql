@@ -9,7 +9,7 @@
 
  -------************* INSERCIONES ******************-------
 
- USE [APPSAFE]
+USE [APPSAFE]
 GO
 -- ##################################################
 -- ##					 DESCUENTO				#####
@@ -71,16 +71,16 @@ insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
 	select '4','1234ABCD','2025-05-25','descripción ingeniosa 4', *from OpenRowset(Bulk 'C:\Users\cmal1\Documents\Universidad\Semestre6\Bases de datos\proyectofinal\Appsafe\imag\Processing.png', Single_Blob) As ProductosFoto
 	go
 insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
-	select '5','6852AZCY','2025-05-25','descripción mas ingeniosa', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor5.png', Single_Blob) As ProductosFoto
+	select '5','6852AZCY','2025-05-25','descripción mas ingeniosa', *from OpenRowset(Bulk 'C:\Users\cmal1\Documents\Universidad\Semestre6\Bases de datos\proyectofinal\Appsafe\imag\Processing.png', Single_Blob) As ProductosFoto
 	go
 insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
-	select '6','4678JHSJ','2025-05-25','descripción  menos ingeniosa ', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor6.png', Single_Blob) As ProductosFoto
+	select '6','4678JHSJ','2025-05-25','descripción  menos ingeniosa ', *from OpenRowset(Bulk 'C:\Users\cmal1\Documents\Universidad\Semestre6\Bases de datos\proyectofinal\Appsafe\imag\Processing.png', Single_Blob) As ProductosFoto
 go
 insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
-	select '7','1569KLAS','2025-05-25','descripción algo ingeniosa', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor7.png', Single_Blob) As ProductosFoto
+	select '7','1569KLAS','2025-05-25','descripción algo ingeniosa', *from OpenRowset(Bulk 'C:\Users\cmal1\Documents\Universidad\Semestre6\Bases de datos\proyectofinal\Appsafe\imag\Processing.png', Single_Blob) As ProductosFoto
 go
 insert into USUARIOS.conductor (ID_USUARIO, LICENCIA,VIGENCIA,DESCRIPCION,FOTO)
-	select '8','4568USAD','2025-05-25','descripción', *from OpenRowset(Bulk 'C:\Users\isaia\OneDrive\Desktop\fotos licencia\conductor8.png', Single_Blob) As ProductosFoto
+	select '8','4568USAD','2025-05-25','descripción', *from OpenRowset(Bulk 'C:\Users\cmal1\Documents\Universidad\Semestre6\Bases de datos\proyectofinal\Appsafe\imag\Processing.png', Single_Blob) As ProductosFoto
 go
 
 -- ##################################################
@@ -163,17 +163,17 @@ COMMIT TRANSACTION
 -- ###  				AUTO					#####
 -- ##################################################
 
-	insert into USUARIOS.automovil (ID_AUTOMOVIL,NUMPLACAS,AÑO,ID_USUARIO,ID_MODELO)
-	values  (1, 'ABC1234', 2021, 4, 1),
-			(2, 'XYZ5678', 2020, 5, 4),
-			(3, 'LMN9012', 2022, 6, 7),
-			(4, 'QRS3456', 2020, 7, 2),
-			(5, 'TUV7890', 2021, 8, 8);
+	insert into USUARIOS.automovil (ID_AUTOMOVIL,NUMPLACAS,AÑO,ID_USUARIO,ID_MODELO, DISPONIBLE)
+	values  (1, 'ABC1234', 2021, 4, 1, 0),
+			(2, 'XYZ5678', 2020, 5, 4, 0),
+			(3, 'LMN9012', 2022, 6, 7, 0),
+			(4, 'QRS3456', 2020, 7, 2, 0),
+			(5, 'TUV7890', 2021, 8, 8, 0);
 
 -- ##################################################
 -- ###					PAGO					#####
 -- ##################################################
-select * from OPERACIONES.PAGO
+
 	insert into OPERACIONES.PAGO(ID_USUARIO,FOLIO,MONTO,FECHA)
 			--pagos para ID 4
 	values  (4, 1, 3200, '2025-04-28'),
@@ -410,20 +410,18 @@ VALUES 	(1, '2025-05-23', -99.120200, 19.508300, -99.133209, 19.432608, 331, 10,
   		(26, '2025-05-10', -99.1600, 19.4500, -99.1700, 19.4600, 280.60, 20, 100.00, 5, 5, 'Servicio rápido y eficiente.', 0, 8, NULL, 3, NULL, 1, NULL),
   		(27, '2025-07-09', -99.1450, 19.4400, -99.1550, 19.4500, 210.40, 15, 210.40, 3, 3, 'Conductor llegó puntual.', 1, 8, 4, 4, NULL, 2, NULL),
 --6 viajes solicitados
-			(28, '2025-05-08', -99.1350, 19.4370, -99.1450, 19.4470, 299.00, 15, 0.00, 5, 5, 'Conductor educado y puntual.', 1, 1, 5, 5, NULL, NULL, NULL),
-  		(29, '2025-06-07', -99.1000, 19.4000, -99.1100, 19.4100, 250.50, 10, 0.00, 4, 4, 'El viaje fue sin demoras.', 0, 1, NULL, 6, NULL, NULL, NULL),
-  		(30, '2025-07-06', -99.1550, 19.4450, -99.1650, 19.4550, 285.25, 20, 0.00, 5, 5, 'Excelente atención al cliente.', 1, 1, 7, 7, NULL, NULL, NULL),
-  		(31, '2025-05-05', -99.1250, 19.4200, -99.1350, 19.4300, 270.00, 15, 0.00, 4, 4, 'Viaje cómodo y tranquilo.', 0, 1, NULL, 8, NULL, NULL, NULL),
-  		(32, '2025-05-04', -99.0900, 19.3950, -99.1000, 19.4050, 225.00, 10, 0.00, 3, 3, 'Sin inconvenientes en ruta.', 1, 1, 1, 1, NULL, NULL, NULL),
-  		(33, '2025-05-03', -99.1150, 19.4100, -99.1250, 19.4200, 240.80, 15, 0.00, 5, 4, 'Buen trato del conductor.', 0, 1, NULL, 1, NULL, NULL, NULL);
+		(28, NULL, -99.1350, 19.4370, -99.1450, 19.4470, 299.00, 15, 0.00, 5, 5, 'Conductor educado y puntual.', 1, 1, 5, 5, NULL, NULL, NULL),
+  		(29, NULL, -99.1000, 19.4000, -99.1100, 19.4100, 250.50, 10, 0.00, 4, 4, 'El viaje fue sin demoras.', 0, 1, NULL, 6, NULL, NULL, NULL),
+  		(30, NULL, -99.1550, 19.4450, -99.1650, 19.4550, 285.25, 20, 0.00, 5, 5, 'Excelente atención al cliente.', 1, 1, 7, 7, NULL, NULL, NULL),
+  		(31, NULL, -99.1250, 19.4200, -99.1350, 19.4300, 270.00, 15, 0.00, 4, 4, 'Viaje cómodo y tranquilo.', 0, 1, NULL, 8, NULL, NULL, NULL),
+  		(32, NULL, -99.0900, 19.3950, -99.1000, 19.4050, 225.00, 10, 0.00, 3, 3, 'Sin inconvenientes en ruta.', 1, 1, 1, 1, NULL, NULL, NULL),
+  		(33, NULL, -99.1150, 19.4100, -99.1250, 19.4200, 240.80, 15, 0.00, 5, 4, 'Buen trato del conductor.', 0, 1, NULL, 1, NULL, NULL, NULL);
 GO
 
 
 COMMIT TRANSACTION;
 
 ENABLE TRIGGER ALL ON OPERACIONES.VIAJE
-
-select * from OPERACIONES.VIAJE
 
  --##################################################
 -- ###				VIAJE_ESTATUS				#####
@@ -613,14 +611,16 @@ VALUES
 	(33, 1, '2025-05-15 12:30:00');
 GO
 
- --##################################################
+-- ##################################################
 -- ###				ACCIDENTE					#####
 -- ##################################################
-
 
 -- ##################################################
 -- ##			REGISTRO_UBICACION				#####
 -- ##################################################
+DISABLE TRIGGER REGISTROS.TR_ ON REGISTROS.REGISTRO_UBICACION
+GO 
+
 -- VIAJE 1 - 2025-05-23
 INSERT INTO REGISTROS.REGISTRO_UBICACION VALUES 
 (1, -99.120200, 19.508300, '2025-05-23 08:00:00', 1),
@@ -701,7 +701,8 @@ INSERT INTO REGISTROS.REGISTRO_UBICACION VALUES
 (49, -99.240000, 19.380000, '2025-05-23 09:33:00', 10),
 (50, -99.270000, 19.360000, '2025-05-23 09:34:00', 10);
 
-
+ENABLE TRIGGER REGISTROS.TR_ ON REGISTROS.REGISTRO_UBICACION
+GO 
 -- ##################################################
 -- ###					QUEJA					#####
 -- ##################################################

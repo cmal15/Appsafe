@@ -63,15 +63,59 @@ BEGIN
 		ROLLBACK TRANSACTION;
 	END
 
+IF UPDATE(DISPONIBLE)
+    BEGIN
+
+        IF EXISTS (
+            SELECT I.ID_USUARIO
+            FROM inserted I
+            WHERE I.DISPONIBLE = 1
+            GROUP BY I.ID_USUARIO
+            HAVING COUNT(*) >= 1 AND EXISTS (
+                SELECT 1
+                FROM USUARIOS.AUTOMOVIL A
+                WHERE A.ID_USUARIO = I.ID_USUARIO
+                  AND A.DISPONIBLE = 1
+                  AND A.ID_AUTOMOVIL NOT IN (SELECT ID_AUTOMOVIL FROM inserted)
+            )
+        )
+        BEGIN
+            RAISERROR('Un usuario ya tiene un automóvil disponible.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+
+        IF EXISTS (
+            SELECT ID_USUARIO
+            FROM inserted
+            WHERE DISPONIBLE = 1
+            GROUP BY ID_USUARIO
+            HAVING COUNT(*) > 1
+        )
+        BEGIN
+            RAISERROR('No se pueden establecer múltiples autos disponibles para el mismo usuario en la misma operación.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+    END
+END;
+GO
+
+CREATE OR ALTER TRIGGER USUARIOS.TR_AUTO_DISPONIBLE
+ON USUARIOS.AUTOMOVIL
+AFTER INSERT
+AS
+BEGIN
+    UPDATE A
+    SET A.DISPONIBLE = 0
+    FROM USUARIOS.AUTOMOVIL A
+    JOIN inserted I ON A.ID_AUTOMOVIL = I.ID_AUTOMOVIL;
 END;
 GO
 
 -- TODO FOR DELETE: VIAJE
 -- TODO FOR UPDATE: VIAJE
-
--- ##################################################
--- ## TRIGGERS CLIENTE
--- ##################################################
 
 -- TODO FOR DELETE: FACTURA, TARJETA, VIAJE
 -- TODO FOR UPDATE: VIAJE
@@ -87,13 +131,14 @@ AS
 					WHERE ID_AUTOMOVIL 
 					IN (SELECT ID_AUTOMOVIL FROM inserted) AND DISPONIBLE= 0 )
 		BEGIN
+		RAISERROR('El automóvil asignado no está disponible.', 16, 1);
 		ROLLBACK TRAN
 		END
 		END
 	ELSE IF UPDATE(ID_ESTATUS)
 		BEGIN
         UPDATE a
-        SET a.DISPONIBLE = 0
+        SET a.DISPONIBLE = 1
         FROM inserted i
         JOIN USUARIOS.AUTOMOVIL a ON i.ID_AUTOMOVIL = a.ID_AUTOMOVIL
         WHERE i.ID_ESTATUS = 5;
@@ -178,28 +223,34 @@ GO
 -- ##################################################
 -- ## TRIGGERS REGISTRO_UBICACION
 -- ##################################################
-CREATE OR ALTER TRIGGER REGISTROS.TR_
+
+CREATE OR ALTER TRIGGER REGISTROS.TR_REGISTRO_UBICACION
 ON REGISTROS.REGISTRO_UBICACION
-FOR INSERT
+AFTER INSERT
 AS
 BEGIN
-	SET NOCOUNT ON;
-	DECLARE @MAX_TIME datetime, @id_viaje  bigint, @INSERTED_TIME datetime, @estatus tinyint
-	
-	SELECT @MAX_TIME = max(Hora), @id_viaje= ID_VIAJE
-	FROM REGISTROS.REGISTRO_UBICACION
-	where id_viaje in (select id_viaje from inserted)								
-	group by ID_VIAJE
-	select @INSERTED_TIME= Hora from inserted
-	
-	select @estatus=ID_ESTATUS from OPERACIONES.VIAJE
-	where ID_VIAJE= @id_viaje
+    SET NOCOUNT ON;
 
-	if @estatus<>4 and not( DATEDIFF(MINUTE, @INSERTED_TIME, @MAX_TIME) = 1 or not exists(SELECT ID_VIAJE
-	FROM REGISTROS.REGISTRO_UBICACION
-	where id_viaje in (select id_viaje from inserted)								
-	))
-		rollback tran	
+    IF EXISTS (
+        SELECT 1
+        FROM inserted i
+        JOIN OPERACIONES.VIAJE v ON v.ID_VIAJE = i.ID_VIAJE
+        WHERE v.ID_ESTATUS <> 4
+        OR EXISTS (
+            SELECT 1
+            FROM REGISTROS.REGISTRO_UBICACION r
+            WHERE r.ID_VIAJE = i.ID_VIAJE
+              AND r.ID_REGISTRO_UBICACION <> i.ID_REGISTRO_UBICACION
+              AND ABS(DATEDIFF(SECOND, r.Hora, i.Hora)) < 60
+        )
+    )
+    BEGIN
+        RAISERROR(
+            'No se puede insertar un nuevo registro de ubicación con menos de 1 minuto de diferencia respecto al anterior (estatus del viaje distinto de 4).',
+            16, 1
+        );
+        ROLLBACK TRANSACTION;
+    END
 END;
 GO
 
@@ -290,32 +341,38 @@ GO
 
 --1'SOLICITADO',2'PROGRAMADO',3'CONFIRMADO',4'EN CURSO', 5'TERMINADO', 6'POR COBRAR',7 'PAGADO',8 'CON ADEUDO',9 'CANCELADO'
 CREATE OR ALTER TRIGGER OPERACIONES.TR_VIAJE_CAMBIO_ESTATUS
-ON OPERACIONES.VIAJE
-FOR UPDATE
+   ON OPERACIONES.VIAJE
+   AFTER UPDATE
 AS
 BEGIN
-
-	IF EXISTS(
-
-		SELECT 1
-		FROM inserted I
-		JOIN deleted D 
-		ON I.ID_VIAJE=D.ID_VIAJE
-		WHERE (
-			(D.ID_ESTATUS=1 AND I.ID_ESTATUS NOT IN (3,9)) OR
-			(D.ID_ESTATUS=2 AND I.ID_ESTATUS NOT IN (3,9)) OR
-			(D.ID_ESTATUS=3 AND I.ID_ESTATUS NOT IN (4,9)) OR
-			(D.ID_ESTATUS=4 AND I.ID_ESTATUS NOT IN (6,9))  OR
-			(D.ID_ESTATUS=5 AND I.ID_ESTATUS <> 5) OR 
-			(D.ID_ESTATUS=6 AND I.ID_ESTATUS NOT IN (7,8)) OR 
-			(D.ID_ESTATUS IN (7,8,9) AND I.ID_ESTATUS NOT IN (5))  
+    IF UPDATE(ID_ESTATUS)
+    BEGIN
+        IF EXISTS (
+			SELECT 1
+			FROM deleted D
+			JOIN inserted I
+			ON I.ID_VIAJE = D.ID_VIAJE
+			WHERE I.ID_ESTATUS <> D.ID_ESTATUS
+				AND (
+                    (D.ID_ESTATUS = 1 AND I.ID_ESTATUS NOT IN (3, 9)) OR
+                    (D.ID_ESTATUS = 2 AND I.ID_ESTATUS NOT IN (3, 9)) OR
+                    (D.ID_ESTATUS = 3 AND I.ID_ESTATUS NOT IN (4, 9)) OR
+                    (D.ID_ESTATUS = 4 AND I.ID_ESTATUS NOT IN (6, 9)) OR
+                    (D.ID_ESTATUS = 5 AND I.ID_ESTATUS <> 5)      OR
+                    (D.ID_ESTATUS = 6 AND I.ID_ESTATUS NOT IN (7, 8)) OR
+                    (D.ID_ESTATUS IN (7,8,9) AND I.ID_ESTATUS NOT IN (5))
+                )
 		)
-	)
-	BEGIN
-		RAISERROR('Transicion de estatus de viaje incorrecta',16,1)
-		ROLLBACK TRANSACTION
-	END
+        BEGIN
+            RAISERROR('Transición de estatus de viaje incorrecta', 16, 1);
+            ROLLBACK TRANSACTION;
+        END
 
+        INSERT INTO REGISTROS.VIAJE_ESTATUS (ID_VIAJE, ID_ESTATUS, FECHA_HORA)
+        SELECT I.ID_VIAJE, I.ID_ESTATUS, GETDATE()
+        FROM inserted I
+
+    END
 END
 GO
 
@@ -334,6 +391,16 @@ BEGIN
 		RAISERROR('Solo se permiten los estatus PROGRAMADO (1) o SOLICITADO (2) como estado inicial del viaje',16,1)
 		ROLLBACK TRANSACTION
 	END
+
+	INSERT INTO REGISTROS.VIAJE_ESTATUS (ID_VIAJE, ID_ESTATUS, FECHA_HORA)
+    SELECT I.ID_VIAJE, I.ID_ESTATUS, GETDATE()
+    FROM inserted I
+
+	UPDATE V
+    SET ID_AUTOMOVIL = NULL
+    FROM OPERACIONES.VIAJE V
+    JOIN inserted I ON V.ID_VIAJE = I.ID_VIAJE;
+
 END
 GO
 -- TODO FOR DELETE: ACCIDENTE, QUEJA

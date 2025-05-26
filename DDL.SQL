@@ -12,9 +12,9 @@
  */
 
 CREATE DATABASE [APPSAFE]
-
+GO
 USE [APPSAFE]
-
+GO
 /* 
  * TABLE: ACCIDENTE 
  */
